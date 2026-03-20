@@ -18,7 +18,11 @@ flight-plan-copilot/
 ├── docs/
 │   ├── copilot-workshop/        # Workshop curriculum (14 modules)
 │   ├── CHEAT-SHEET.md           # Presenter single-page prompt reference
-│   └── QUICK-REFERENCE.md       # Participant handout (shortcuts, CRAFT, tips)
+│   ├── QUICK-REFERENCE.md       # Participant handout (shortcuts, CRAFT, tips)
+│   ├── quick-reference-card.html      # Full-page graphic reference card
+│   ├── quick-reference-3x5.html       # 3×5 index card version
+│   ├── quick-reference-4x6.html       # 4×6 two-sided print card
+│   └── quick-reference-ultimate.html  # Ultra-dense single-page (sticker-ready)
 ├── demos/
 │   ├── DEMO-SCRIPT.md           # Master presenter guide
 │   ├── 01-legacy-upgrade/       # Express 4 → modern Node.js
@@ -272,6 +276,10 @@ Presenter tools and participant handouts:
 |------|-----------||
 | [docs/CHEAT-SHEET.md](docs/CHEAT-SHEET.md) | Single-page presenter reference — every prompt in order |
 | [docs/QUICK-REFERENCE.md](docs/QUICK-REFERENCE.md) | Participant handout — shortcuts, CRAFT framework, tips |
+| [quick-reference-ultimate.html](docs/quick-reference-ultimate.html) | Ultimate single-page print card — ~80 items, sticker-ready |
+| [quick-reference-4x6.html](docs/quick-reference-4x6.html) | Two-sided 4×6 card — front: essentials, back: tips & patterns |
+| [quick-reference-3x5.html](docs/quick-reference-3x5.html) | 3×5 index card — dense 3-column layout |
+| [quick-reference-card.html](docs/quick-reference-card.html) | Full-page graphic reference — great for screen share |
 | [setup.sh](setup.sh) | One-command environment setup and smoke test |
 
 Demo code and presenter walk-throughs live in [`demos/`](demos/):
