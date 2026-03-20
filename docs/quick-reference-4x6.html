@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GitHub Copilot — Ultimate Quick Reference (4×6 Print Card)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #0d1117;
+    --card:    #151b23;
+    --panel:   #1c2333;
+    --accent:  #58a6ff;
+    --gold:    #e3b341;
+    --green:   #3fb950;
+    --orange:  #f0883e;
+    --pink:    #f778ba;
+    --purple:  #bc8cff;
+    --red:     #f85149;
+    --cyan:    #39d2c0;
+    --text:    #e6edf3;
+    --dim:     #8b949e;
+    --faint:   #30404d;
+    --line:    rgba(48,64,77,.55);
+  }
+
+  @page { size: 6in 4in landscape; margin: 0; }
+
+  html { font-size: 6.4px; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  @media print {
+    html { font-size: 5.8px; }
+    body { padding: 0; gap: 0; background: #000; }
+    .face { box-shadow: none; border: none; border-radius: 0; }
+    .face + .face { page-break-before: always; }
+  }
+
+  /* ══ Card faces ══ */
+  .face {
+    width: 6in; height: 4in;
+    background: var(--card);
+    border: 1px solid var(--faint);
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .35rem .7rem;
+    background: linear-gradient(90deg, #0d1b2a, #161b22);
+    border-bottom: 1.5px solid var(--accent);
+    flex-shrink: 0;
+  }
+  .hdr-left { display: flex; align-items: center; gap: .5rem; }
+  .hdr svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .hdr h1 {
+    font-size: 1.2rem; font-weight: 900; letter-spacing: -.02em;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hdr-badge {
+    font-size: .62rem; font-weight: 700; color: var(--dim);
+    border: 1px solid var(--faint); border-radius: 3px;
+    padding: .05rem .35rem; text-transform: uppercase; letter-spacing: .08em;
+  }
+
+  /* ── Grid body ── */
+  .grid { flex: 1; display: grid; min-height: 0; gap: 0; }
+  .grid-front { grid-template-columns: 28% 36% 36%; }
+  .grid-back  { grid-template-columns: 33% 34% 33%; }
+
+  .cell {
+    padding: .45rem .55rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    overflow: hidden;
+  }
+  .cell:nth-child(3n) { border-right: none; }
+  .cell.nb { border-bottom: none; }
+  .cell.full { grid-column: 1 / -1; border-right: none; }
+  .cell.span2 { grid-column: span 2; }
+
+  /* ── Section titles ── */
+  .st {
+    font-size: .68rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .08em; display: flex; align-items: center; gap: .3rem;
+    flex-shrink: 0; line-height: 1.2;
+  }
+  .st .d { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-size: .58rem; font-weight: 600; color: var(--dim);
+    text-transform: uppercase; letter-spacing: .05em;
+    text-align: left; padding: .1rem .2rem;
+  }
+  td {
+    font-size: .78rem; padding: .14rem .2rem;
+    border-top: 1px solid rgba(48,64,77,.3);
+    line-height: 1.3; vertical-align: top;
+  }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+
+  kbd {
+    display: inline-block; background: var(--bg); border: 1px solid var(--faint);
+    border-radius: 2px; padding: 0 .22rem;
+    font-family: 'Inter', sans-serif; font-size: .68rem; font-weight: 600;
+    line-height: 1.5; color: var(--text);
+  }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: .72rem;
+    color: var(--accent); background: rgba(88,166,255,.1);
+    padding: 0 .2rem; border-radius: 2px;
+  }
+  code.g { color: var(--green); background: rgba(63,185,80,.1); }
+  code.o { color: var(--orange); background: rgba(240,136,62,.1); }
+  code.p { color: var(--purple); background: rgba(188,140,255,.1); }
+  code.k { color: var(--pink); background: rgba(247,120,186,.1); }
+  code.c { color: var(--cyan); background: rgba(57,210,192,.1); }
+
+  /* ── Mode badges ── */
+  .modes { display: flex; flex-direction: column; gap: .35rem; }
+  .m {
+    display: flex; align-items: center; gap: .4rem;
+    background: var(--bg); border-radius: 5px; padding: .35rem .5rem;
+    border: 1px solid var(--faint);
+  }
+  .m-i {
+    width: 20px; height: 20px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; flex-shrink: 0;
+  }
+  .m-i.gh { background: rgba(88,166,255,.12); }
+  .m-i.il { background: rgba(188,140,255,.12); }
+  .m-i.ch { background: rgba(63,185,80,.12); }
+  .m-i.ed { background: rgba(240,136,62,.12); }
+  .m-n { font-weight: 700; font-size: .8rem; }
+  .m-k { font-size: .68rem; color: var(--dim); }
+  .m-d { font-size: .68rem; color: var(--dim); margin-top: 1px; }
+
+  /* ── CRAFT ── */
+  .craft { display: flex; flex-direction: column; gap: .15rem; }
+  .cr {
+    display: flex; align-items: center; gap: .3rem;
+    font-size: .76rem; line-height: 1.3;
+  }
+  .cl {
+    width: 14px; height: 14px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: .68rem; flex-shrink: 0;
+  }
+  .cl-c { background: rgba(88,166,255,.2); color: var(--accent); }
+  .cl-r { background: rgba(63,185,80,.2); color: var(--green); }
+  .cl-a { background: rgba(227,179,65,.2); color: var(--gold); }
+  .cl-f { background: rgba(240,136,62,.2); color: var(--orange); }
+  .cl-t { background: rgba(247,120,186,.2); color: var(--pink); }
+  .clab { font-weight: 600; width: 3.5rem; flex-shrink: 0; }
+  .ceg { color: var(--dim); font-style: italic; font-size: .68rem; }
+
+  /* ── Tips ── */
+  .tips { list-style: none; display: flex; flex-direction: column; gap: .12rem; }
+  .tips li {
+    font-size: .74rem; line-height: 1.35; padding-left: .9rem; position: relative;
+  }
+  .tips li::before {
+    content: '›'; position: absolute; left: .1rem;
+    font-weight: 800; color: var(--gold); font-size: .8rem;
+  }
+
+  /* ── Decision tree ── */
+  .tree { display: flex; flex-direction: column; gap: .08rem; }
+  .tr {
+    display: flex; align-items: baseline; font-size: .74rem; gap: .25rem; line-height: 1.35;
+  }
+  .tq { color: var(--dim); min-width: 11rem; }
+  .arr { color: var(--gold); font-weight: 700; }
+  .ta { font-weight: 700; white-space: nowrap; }
+
+  /* ── Prompt examples ── */
+  .prompt-ex {
+    background: var(--bg); border: 1px solid var(--faint);
+    border-radius: 4px; padding: .3rem .45rem;
+    font-size: .72rem; line-height: 1.4;
+    color: var(--dim); font-style: italic;
+  }
+  .prompt-ex strong { color: var(--text); font-style: normal; }
+
+  /* ── Mini grid ── */
+  .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; }
+  .mini-card {
+    background: var(--bg); border: 1px solid var(--faint);
+    border-radius: 4px; padding: .3rem .4rem;
+  }
+  .mini-card .mc-t { font-weight: 700; font-size: .72rem; margin-bottom: .1rem; }
+  .mini-card .mc-d { font-size: .68rem; color: var(--dim); line-height: 1.3; }
+
+  /* ── Footer ── */
+  .foot {
+    padding: .2rem .7rem;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .58rem; color: var(--dim); flex-shrink: 0;
+  }
+
+  .side-tag {
+    font-size: .55rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--faint);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--                        FRONT SIDE                             -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="face">
+  <div class="hdr">
+    <div class="hdr-left">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#58a6ff" opacity=".3"/>
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#58a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>GitHub Copilot — Quick Reference</h1>
+    </div>
+    <div style="display:flex;gap:.5rem;align-items:center;">
+      <span class="hdr-badge">Front</span>
+      <span class="side-tag">Flight Plan Dev Day</span>
+    </div>
+  </div>
+
+  <div class="grid grid-front">
+
+    <!-- ── Col 1: Modes ── -->
+    <div class="cell" style="grid-row: span 2;">
+      <div class="st" style="color:var(--accent)"><span class="d" style="background:var(--accent)"></span> Four Ways In</div>
+      <div class="modes">
+        <div class="m">
+          <div class="m-i gh">👻</div>
+          <div>
+            <div class="m-n">Ghost Text</div>
+            <div class="m-k">Just type — suggestions appear</div>
+            <div class="m-d">Completions, patterns, comment→code</div>
+          </div>
+        </div>
+        <div class="m">
+          <div class="m-i il">⚡</div>
+          <div>
+            <div class="m-n">Inline Chat</div>
+            <div class="m-k"><kbd>⌘</kbd><kbd>I</kbd> / <kbd>Ctrl</kbd><kbd>I</kbd></div>
+            <div class="m-d">Transform, generate, refactor at cursor</div>
+          </div>
+        </div>
+        <div class="m">
+          <div class="m-i ch">💬</div>
+          <div>
+            <div class="m-n">Chat Panel</div>
+            <div class="m-k"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>I</kbd> / <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>I</kbd></div>
+            <div class="m-d">Conversations, debug, multi-step</div>
+          </div>
+        </div>
+        <div class="m">
+          <div class="m-i ed">🛠</div>
+          <div>
+            <div class="m-n">Edits Mode</div>
+            <div class="m-k">Toggle in Chat Panel</div>
+            <div class="m-d">Multi-file changes with diff preview</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Col 2 Top: Shortcuts ── -->
+    <div class="cell">
+      <div class="st" style="color:var(--gold)"><span class="d" style="background:var(--gold)"></span> Keyboard Shortcuts</div>
+      <table>
+        <tr><th>Action</th><th>Mac</th><th>Win/Linux</th></tr>
+        <tr><td>Accept suggestion</td><td><kbd>Tab</kbd></td><td><kbd>Tab</kbd></td></tr>
+        <tr><td>Dismiss</td><td><kbd>Esc</kbd></td><td><kbd>Esc</kbd></td></tr>
+        <tr><td>Next suggestion</td><td><kbd>⌥</kbd><kbd>]</kbd></td><td><kbd>Alt</kbd><kbd>]</kbd></td></tr>
+        <tr><td>Prev suggestion</td><td><kbd>⌥</kbd><kbd>[</kbd></td><td><kbd>Alt</kbd><kbd>[</kbd></td></tr>
+        <tr><td>Accept word</td><td><kbd>⌘</kbd><kbd>→</kbd></td><td><kbd>Ctrl</kbd><kbd>→</kbd></td></tr>
+        <tr><td>Inline Chat</td><td><kbd>⌘</kbd><kbd>I</kbd></td><td><kbd>Ctrl</kbd><kbd>I</kbd></td></tr>
+        <tr><td>Chat Panel</td><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>I</kbd></td><td><kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>I</kbd></td></tr>
+        <tr><td>Quick Chat</td><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>⌥</kbd><kbd>L</kbd></td><td><kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>Alt</kbd><kbd>L</kbd></td></tr>
+        <tr><td>New conversation</td><td><kbd>⌘</kbd><kbd>L</kbd></td><td><kbd>Ctrl</kbd><kbd>L</kbd></td></tr>
+      </table>
+    </div>
+
+    <!-- ── Col 3 Top: Slash + Participants ── -->
+    <div class="cell">
+      <div class="st" style="color:var(--green)"><span class="d" style="background:var(--green)"></span> Slash Commands</div>
+      <table>
+        <tr><td><code>/tests</code></td><td>Generate test suite for selection</td></tr>
+        <tr><td><code>/fix</code></td><td>Fix bugs in selected code</td></tr>
+        <tr><td><code>/doc</code></td><td>Add JSDoc / docstrings</td></tr>
+        <tr><td><code>/explain</code></td><td>Explain what code does</td></tr>
+        <tr><td><code>/clear</code></td><td>Clear chat history</td></tr>
+      </table>
+      <div class="st" style="color:var(--purple); margin-top:.15rem;"><span class="d" style="background:var(--purple)"></span> Chat Participants</div>
+      <table>
+        <tr><td><code class="p">@workspace</code></td><td>Search entire project for context</td></tr>
+        <tr><td><code class="p">@vscode</code></td><td>Editor settings, keybindings, config</td></tr>
+        <tr><td><code class="p">@terminal</code></td><td>Reference terminal output & errors</td></tr>
+      </table>
+    </div>
+
+    <!-- ── Col 2 Bottom: CRAFT ── -->
+    <div class="cell nb">
+      <div class="st" style="color:var(--orange)"><span class="d" style="background:var(--orange)"></span> CRAFT Framework</div>
+      <div class="craft">
+        <div class="cr"><div class="cl cl-c">C</div><div class="clab">Context</div><div class="ceg">"In this Express.js REST API…"</div></div>
+        <div class="cr"><div class="cl cl-r">R</div><div class="clab">Role</div><div class="ceg">"Write a middleware that…"</div></div>
+        <div class="cr"><div class="cl cl-a">A</div><div class="clab">Attributes</div><div class="ceg">"…with rate limiting, logging…"</div></div>
+        <div class="cr"><div class="cl cl-f">F</div><div class="clab">Format</div><div class="ceg">"…as ES module with JSDoc…"</div></div>
+        <div class="cr"><div class="cl cl-t">T</div><div class="clab">Tests</div><div class="ceg">"…including edge cases for errors"</div></div>
+      </div>
+      <div class="prompt-ex" style="margin-top:.25rem;">
+        <strong>Example:</strong> "In this Express flight API, <strong>write a validation middleware</strong>
+        for booking requests <strong>with</strong> date range checks, seat availability, passenger
+        name format <strong>as</strong> an async function with descriptive errors, <strong>including</strong>
+        unit tests for invalid dates and overbooking."
+      </div>
+    </div>
+
+    <!-- ── Col 3 Bottom: Context Variables ── -->
+    <div class="cell nb">
+      <div class="st" style="color:var(--cyan)"><span class="d" style="background:var(--cyan)"></span> Context Variables</div>
+      <table>
+        <tr><td><code class="c">#file</code></td><td>Attach a specific file as context</td></tr>
+        <tr><td><code class="c">#selection</code></td><td>Currently selected code</td></tr>
+        <tr><td><code class="c">#editor</code></td><td>Visible code in active editor</td></tr>
+        <tr><td><code class="c">#codebase</code></td><td>Indexed workspace search</td></tr>
+        <tr><td><code class="c">#terminalLastCommand</code></td><td>Last terminal cmd + output</td></tr>
+        <tr><td><code class="c">#terminalSelection</code></td><td>Selected text in terminal</td></tr>
+      </table>
+      <div class="prompt-ex" style="margin-top:.2rem;">
+        <strong>Tip:</strong> Combine them → <code class="c">@workspace</code> <code class="c">#file:utils.js</code>
+        "Add retry logic to the fetch calls"
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>github.com/msfttoler/flight-plan-copilot</span>
+    <span style="color:var(--accent)">✦ Flip for tips, patterns & decision tree ✦</span>
+    <span>Print: ⌘P → 6×4 landscape</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--                        BACK SIDE                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="face">
+  <div class="hdr">
+    <div class="hdr-left">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#58a6ff" opacity=".3"/>
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#58a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>Tips, Patterns & Decision Tree</h1>
+    </div>
+    <div style="display:flex;gap:.5rem;align-items:center;">
+      <span class="hdr-badge">Back</span>
+      <span class="side-tag">Flight Plan Dev Day</span>
+    </div>
+  </div>
+
+  <div class="grid grid-back">
+
+    <!-- ── Col 1: Pro Tips ── -->
+    <div class="cell" style="grid-row: span 2;">
+      <div class="st" style="color:var(--pink)"><span class="d" style="background:var(--pink)"></span> Pro Tips</div>
+      <ul class="tips">
+        <li><strong>Open relevant files</strong> before chatting — Copilot uses open tabs as context</li>
+        <li><strong>Name things well</strong> — <code>getFlightPrice()</code> prompts better than <code>gfp()</code></li>
+        <li><strong>Comment first</strong>, then pause — let Copilot write the implementation</li>
+        <li><strong>Highlight code</strong> before <kbd>⌘</kbd><kbd>I</kbd> for targeted transforms</li>
+        <li><strong>Use <code class="c">#file</code></strong> to point chat at specific files for context</li>
+        <li><strong>Iterate</strong> — start with a rough prompt, refine in follow-ups</li>
+        <li><strong>Say "don't change X"</strong> to constrain what Copilot touches</li>
+        <li><strong>Ask "explain this error"</strong> + paste the error message — fast debugging</li>
+        <li><strong>Use edits mode</strong> for changes across multiple files at once</li>
+        <li><strong>Review always</strong> — Copilot is a first draft, you are the editor</li>
+      </ul>
+
+      <div class="st" style="color:var(--red); margin-top:.2rem;"><span class="d" style="background:var(--red)"></span> Common Pitfalls</div>
+      <ul class="tips">
+        <li>Vague prompts → vague code. Be specific about inputs and outputs</li>
+        <li>Forgetting context — Copilot can't read files you haven't opened</li>
+        <li>Accepting without reading — always check logic and edge cases</li>
+        <li>Giant prompts — break big tasks into smaller conversational steps</li>
+      </ul>
+    </div>
+
+    <!-- ── Col 2 Top: Prompt Patterns ── -->
+    <div class="cell">
+      <div class="st" style="color:var(--gold)"><span class="d" style="background:var(--gold)"></span> Prompt Patterns That Work</div>
+      <div style="display:flex; flex-direction:column; gap:.2rem;">
+        <div class="prompt-ex"><strong>Comment → Code</strong><br>// Validate boarding pass: check flight, date, passenger name, seat</div>
+        <div class="prompt-ex"><strong>Test → Implementation</strong><br>"Here's my test file. Write the function that makes these tests pass."</div>
+        <div class="prompt-ex"><strong>Old → New</strong><br>"Refactor this callback-based code to use async/await"</div>
+        <div class="prompt-ex"><strong>Error → Fix</strong><br>"I'm getting [paste error]. Here's the relevant code: [#selection]"</div>
+        <div class="prompt-ex"><strong>Explain → Learn</strong><br>"Explain this regex step by step and suggest improvements"</div>
+        <div class="prompt-ex"><strong>Scaffold → Build</strong><br>"Create a REST endpoint for flight search with query params: origin, destination, date"</div>
+      </div>
+    </div>
+
+    <!-- ── Col 3 Top: Decision Tree ── -->
+    <div class="cell">
+      <div class="st" style="color:var(--accent)"><span class="d" style="background:var(--accent)"></span> When to Use What</div>
+      <div class="tree">
+        <div class="tr"><span class="tq">Know what you want?</span><span class="arr">→</span><span class="ta">Ghost Text</span></div>
+        <div class="tr"><span class="tq">Transform selected code?</span><span class="arr">→</span><span class="ta">Inline Chat</span></div>
+        <div class="tr"><span class="tq">Think through a problem?</span><span class="arr">→</span><span class="ta">Chat Panel</span></div>
+        <div class="tr"><span class="tq">Multi-file refactor?</span><span class="arr">→</span><span class="ta">Edits Mode</span></div>
+        <div class="tr"><span class="tq">Need tests / docs / fix?</span><span class="arr">→</span><span class="ta">Slash Commands</span></div>
+        <div class="tr"><span class="tq">Need project context?</span><span class="arr">→</span><span class="ta"><code class="p">@workspace</code></span></div>
+        <div class="tr"><span class="tq">Debug terminal errors?</span><span class="arr">→</span><span class="ta"><code class="p">@terminal</code></span></div>
+        <div class="tr"><span class="tq">Tweak VS Code itself?</span><span class="arr">→</span><span class="ta"><code class="p">@vscode</code></span></div>
+      </div>
+
+      <div class="st" style="color:var(--green); margin-top:.3rem;"><span class="d" style="background:var(--green)"></span> Useful VS Code Settings</div>
+      <table>
+        <tr><td><code class="g">editor.inlineSuggest.enabled</code></td><td>Toggle ghost text</td></tr>
+        <tr><td><code class="g">github.copilot.enable</code></td><td>Per-language on/off</td></tr>
+        <tr><td><code class="g">chat.editor.fontSize</code></td><td>Chat panel font size</td></tr>
+      </table>
+    </div>
+
+    <!-- ── Col 2 Bottom: Power Combos ── -->
+    <div class="cell nb">
+      <div class="st" style="color:var(--purple)"><span class="d" style="background:var(--purple)"></span> Power Combos</div>
+      <div class="mini-grid">
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--accent)">Bug Hunt</div>
+          <div class="mc-d">Select buggy code → <code>/fix</code> → review diff → accept</div>
+        </div>
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--green)">Test-First</div>
+          <div class="mc-d">Write test → select function → <code>/tests</code> → run tests</div>
+        </div>
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--gold)">Explain + Improve</div>
+          <div class="mc-d"><code>/explain</code> → "now refactor for readability"</div>
+        </div>
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--pink)">Modernize</div>
+          <div class="mc-d">Select legacy code → <kbd>⌘</kbd><kbd>I</kbd> → "convert to modern ES module"</div>
+        </div>
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--orange)">Doc Sprint</div>
+          <div class="mc-d">Select module → <code>/doc</code> → paste into README</div>
+        </div>
+        <div class="mini-card">
+          <div class="mc-t" style="color:var(--cyan)">Debug Loop</div>
+          <div class="mc-d">Copy error → Chat → "explain + fix" → apply → test</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Col 3 Bottom: Customization ── -->
+    <div class="cell nb">
+      <div class="st" style="color:var(--orange)"><span class="d" style="background:var(--orange)"></span> Customize Copilot</div>
+      <table>
+        <tr><td style="color:var(--orange)"><code class="o">.github/copilot-instructions.md</code></td></tr>
+        <tr><td colspan="2" style="color:var(--dim);font-weight:400">Repo-wide rules Copilot follows (style, theme, constraints)</td></tr>
+      </table>
+      <table style="margin-top:.15rem;">
+        <tr><td style="color:var(--orange)"><code class="o">.github/skills/*/SKILL.md</code></td></tr>
+        <tr><td colspan="2" style="color:var(--dim);font-weight:400">Teach Copilot domain-specific workflows</td></tr>
+      </table>
+      <table style="margin-top:.15rem;">
+        <tr><td style="color:var(--orange)"><code class="o">.vscode/settings.json</code></td></tr>
+        <tr><td colspan="2" style="color:var(--dim);font-weight:400">Per-project Copilot behavior overrides</td></tr>
+      </table>
+
+      <div class="st" style="color:var(--cyan); margin-top:.25rem;"><span class="d" style="background:var(--cyan)"></span> CLI (Bonus)</div>
+      <table>
+        <tr><td><code class="c">gh copilot suggest</code></td><td>Shell command from English</td></tr>
+        <tr><td><code class="c">gh copilot explain</code></td><td>Explain a shell command</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>github.com/msfttoler/flight-plan-copilot</span>
+    <span style="color:var(--gold)">✦ From Curious to Dangerous in Four Hours ✦</span>
+    <span>© 2026 Flight Plan Workshop</span>
+  </div>
+</div>
+
+</body>
+</html>
