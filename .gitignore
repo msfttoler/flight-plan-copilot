@@ -13,3 +13,4 @@ dist/
 # Editor
 .vscode/settings.json
 .idea/
+hackathon/starter/node_modules/
