@@ -4,6 +4,23 @@
 
 A hands-on, keyboard-first workshop that takes developers from their first encounter with GitHub Copilot to confidently building real applications with AI-assisted development. No death-by-slides — this is live demos, hands-on challenges, and a team showdown.
 
+This repo includes **both** the workshop curriculum **and** a ready-to-run demo suite with pre-built code for live presentations.
+
+---
+
+## Repo Structure
+
+```
+flight-plan-copilot/
+├── docs/copilot-workshop/     # Workshop curriculum (14 modules)
+├── demos/
+│   ├── DEMO-SCRIPT.md         # Master presenter guide
+│   ├── 01-legacy-upgrade/     # Express 4 → modern Node.js (Copilot modernization)
+│   ├── 02-webapp-to-containers/ # App Service → Azure Container Apps
+│   └── 03-quick-wins/         # Bug hunt, test generation, two-minute wow
+└── README.md
+```
+
 ---
 
 ## Who Is This For?
@@ -57,6 +74,104 @@ The session starts with pure spectacle, then progressively hands the keyboard to
 
 ---
 
+## Live Demo Suite
+
+Three pre-built demos with real code you run during the workshop. Each includes intentional problems for Copilot to solve live. Full walk-through scripts are in [`demos/DEMO-SCRIPT.md`](demos/DEMO-SCRIPT.md).
+
+### Demo 1: Legacy Framework Upgrade (15–20 min)
+
+**Folder:** `demos/01-legacy-upgrade/legacy-app/`
+
+A flight tracking REST API written in deliberately outdated JavaScript. The presenter uses Copilot to modernize it live — and the audience watches years of tech debt disappear in minutes.
+
+**What's intentionally wrong:**
+
+| File | Problems |
+|------|----------|
+| `package.json` | `moment` (deprecated), `request` (deprecated), `body-parser` (redundant since Express 4.16) |
+| `server.js` | `var` everywhere, `require()` instead of ES imports, string concatenation, error handler leaks full stack trace to client |
+| `routes/flights.js` | `lodash` for native array operations, nested loops, **a real bug** in the DELETE handler (forward-iteration splice skips bookings) |
+| `routes/bookings.js` | Nested `for` loops instead of `.find()`, HTML email body built with `+` concatenation, weak random confirmation codes |
+| `utils.js` | Hand-rolled email regex (flawed), deeply nested seat-map generation loops, old-style exports |
+
+**What you demo with Copilot:**
+1. Select `server.js` → Chat: *"List every modernization opportunity — security, deprecated, performance, style"*
+2. Ask Copilot to modernize: ES modules, `const`/`let`, `express.json()`, native `Intl.DateTimeFormat`, fix the stack-trace leak
+3. Open the DELETE handler → *"Find the bug"* → Copilot spots the forward-splice issue
+4. Select `bookings.js` → Inline chat: modernize nested loops to `.map()` + `.find()`
+5. Select `calculateDistance` in `utils.js` → `/tests` → instant test suite
+
+**Talking points:** Copilot knows `moment` is deprecated, spots the `body-parser` redundancy, and finds real bugs when asked. This is Copilot as code reviewer + modernization engine.
+
+---
+
+### Demo 2: Web App → Azure Container Apps (10–15 min)
+
+**Folder:** `demos/02-webapp-to-containers/webapp/`
+
+A working flight dashboard web app (Express + EJS + polished dark-theme CSS) that simulates an Azure App Service deployment. The presenter uses Copilot to containerize it and generate Azure Container Apps infrastructure — without changing a single line of application code.
+
+**What's included:**
+- `server.js` — Express server with EJS views, API endpoints, health check
+- `views/dashboard.ejs` — Flight status table with status badges
+- `public/style.css` — Dark airline-display theme
+- `app-service-config.json` — Mimics App Service configuration (runtime, startup command, app settings)
+
+**What you demo with Copilot:**
+1. Run the app (`npm start`) → show the dashboard in a browser at `http://localhost:8080`
+2. Ask Copilot to generate a production `Dockerfile` (multi-stage build, non-root user, health check, layer caching)
+3. Ask for a `.dockerignore` and `docker-compose.yml` for local dev
+4. Build and run in Docker → same app, now containerized
+5. Ask Copilot to generate Azure Bicep for Container Apps: environment, container app, ACR, managed identity for ACR pull, ingress on port 8080, health probes, scale 0–5 with HTTP rule
+
+**Talking points:** The application code is unchanged — only the infrastructure around it evolves. Copilot generates production Docker patterns and Azure Bicep with security best practices (managed identity, no admin creds on ACR, scale-to-zero).
+
+---
+
+### Demo 3: Quick Wins (5–10 min each)
+
+**Folder:** `demos/03-quick-wins/`
+
+Three standalone demos you can drop into any part of the workshop.
+
+#### 3A: Two-Minute Wow — Flight Departure Board
+
+**Use during:** Module 01 (Opening & First Wow)
+
+Create a new empty file, type one multi-line comment describing a retro airport departure board, and let Copilot generate the entire single-file HTML app — canvas, CSS, and JS. Open in browser for instant "wow."
+
+A pre-built fallback is at `demos/03-quick-wins/flight-board.html` — dark split-flap display with color-coded status badges and live clock.
+
+#### 3B: Bug Hunt — 7 Bugs in Flight Booking Code
+
+**Use during:** Module 05 (Challenge: Bug Hunt)
+
+Open `demos/03-quick-wins/buggy-flights.js`. Seven intentional bugs across flight-themed functions:
+
+| # | Function | Bug |
+|---|----------|-----|
+| 1 | `assignBoardingGroup` | Rows 31+ return `undefined` — missing default case |
+| 2 | `isFlightOnTime` | `=` (assignment) instead of `<=` (comparison) |
+| 3 | `duplicateManifest` | Shallow copy — nested objects are still references |
+| 4 | `bookFlight` | Catch block silently drops failures |
+| 5 | `calculateFare` | `i <= passengers.length` — off-by-one past array end |
+| 6 | `findAvailableGate` | Returns last empty gate not first, mutates during iteration |
+| 7 | `isSeatAvailable` | Logic inverted — `true` means occupied |
+
+Select the whole file → *"Find all bugs and explain each one"* → Copilot finds 6–7 in seconds. Then: *"Fix them all"* → *"Generate tests that would have caught these."*
+
+#### 3C: Test Generation — Flight Pricing Engine
+
+**Use during:** Module 06 (Testing & Documentation)
+
+Open `demos/03-quick-wins/pricing-engine.js`. A rich `calculateFlightPrice` function with age-based discounts, cabin class multipliers, checked bag tiers, taxes/fees, and discount codes.
+
+1. Select the function → `/tests` → Copilot generates 10-15 tests
+2. Ask: *"What edge cases are missing?"* → gets boundary conditions (age exactly 2/12/65, all infants, negative prices, unknown discount codes)
+3. Select the function → `/doc` → full JSDoc with `@param`, `@returns`, `@throws`, `@example`
+
+---
+
 ## Challenges at a Glance
 
 | # | Challenge | Format | Key Skill Practiced |
@@ -79,20 +194,33 @@ For groups that finish early or want to go deeper:
 
 ---
 
-## Prerequisites
+## Prerequisites & Setup
 
-**Every attendee needs:**
+### Every Attendee
+
 - GitHub account with Copilot enabled ([free tier](https://github.com/features/copilot) works)
 - VS Code (recommended) or their preferred IDE with Copilot extension installed
 - Copilot Chat panel accessible (Ctrl+Shift+I / Cmd+Shift+I)
 
-**Presenter needs:**
-- VS Code with Copilot Chat
-- A terminal, Node.js 18+, Python 3.10+ (for polyglot demos)
+**Free tier note:** The free plan includes code completions and limited chat messages per month. Attendees should avoid burning through chat quota before the session.
+
+### Presenter Pre-Flight
+
+- VS Code with Copilot Chat, terminal, Node.js 18+, Python 3.10+
 - `gh` CLI with Copilot extension (for CLI demos)
+- Docker Desktop (for Demo 2: containerization)
 - Projector/screen share, 20pt+ editor font
 
-**Free tier note:** The free plan includes code completions and limited chat messages per month. Attendees should avoid burning through chat quota before the session.
+**Demo setup commands:**
+```bash
+# Install demo dependencies
+cd demos/01-legacy-upgrade/legacy-app && npm install && cd -
+cd demos/02-webapp-to-containers/webapp && npm install && cd -
+
+# Verify both apps start
+cd demos/01-legacy-upgrade/legacy-app && npm start   # http://localhost:3000
+cd demos/02-webapp-to-containers/webapp && npm start  # http://localhost:8080
+```
 
 ---
 
@@ -126,6 +254,17 @@ All session content lives in [`docs/copilot-workshop/`](docs/copilot-workshop/):
 | [11-wrap-up.md](docs/copilot-workshop/11-wrap-up.md) | Wrap-Up & Q&A |
 | [extra-credit-a-copilot-cli.md](docs/copilot-workshop/extra-credit-a-copilot-cli.md) | Extra Credit: Copilot CLI |
 | [extra-credit-b-copilot-sdk.md](docs/copilot-workshop/extra-credit-b-copilot-sdk.md) | Extra Credit: Build a Copilot Extension |
+
+Demo code and presenter walk-throughs live in [`demos/`](demos/):
+
+| Path | What It Is |
+|------|-----------|
+| [DEMO-SCRIPT.md](demos/DEMO-SCRIPT.md) | Master presenter guide — step-by-step scripts for all three demos |
+| [01-legacy-upgrade/legacy-app/](demos/01-legacy-upgrade/legacy-app/) | Intentionally outdated Express 4 flight tracker API |
+| [02-webapp-to-containers/webapp/](demos/02-webapp-to-containers/webapp/) | Flight dashboard web app (App Service style, ready to containerize) |
+| [03-quick-wins/buggy-flights.js](demos/03-quick-wins/buggy-flights.js) | 7 intentional bugs for the Bug Hunt demo |
+| [03-quick-wins/pricing-engine.js](demos/03-quick-wins/pricing-engine.js) | Flight pricing engine for `/tests` and `/doc` demos |
+| [03-quick-wins/flight-board.html](demos/03-quick-wins/flight-board.html) | Retro departure board — two-minute wow fallback |
 
 ---
 
