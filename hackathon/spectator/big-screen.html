@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hackathon Leaderboard — Big Screen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --border: #1f2937;
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --accent: #3b82f6;
+    --gold: #f59e0b;
+    --silver: #94a3b8;
+    --bronze: #d97706;
+    --green: #22c55e;
+    --red: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .event-title {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .event-title h1 {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .event-title .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .phase-badge {
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--accent);
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(59, 130, 246, 0.3); }
+    50% { border-color: rgba(59, 130, 246, 0.8); }
+  }
+
+  .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* ---- Main Grid ---- */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    height: calc(100vh - 90px);
+    gap: 0;
+  }
+
+  /* ---- Leaderboard ---- */
+  .leaderboard {
+    padding: 24px 48px;
+    overflow: hidden;
+  }
+
+  .board-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 200px 160px;
+    align-items: center;
+    padding: 16px 24px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .board-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+    background: var(--team-color, var(--muted));
+  }
+
+  .board-row.rank-1 {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+    border-color: rgba(245, 158, 11, 0.2);
+  }
+
+  .board-row.rank-2 {
+    background: linear-gradient(135deg, rgba(148, 163, 184, 0.06), rgba(148, 163, 184, 0.02));
+    border-color: rgba(148, 163, 184, 0.15);
+  }
+
+  .board-row.rank-3 {
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.06), rgba(217, 119, 6, 0.02));
+    border-color: rgba(217, 119, 6, 0.15);
+  }
+
+  .board-row.score-flash {
+    animation: flash 0.8s ease-out;
+  }
+
+  @keyframes flash {
+    0% { background: rgba(34, 197, 94, 0.2); }
+    100% { background: var(--surface); }
+  }
+
+  .rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .rank-1 .rank { color: var(--gold); }
+  .rank-2 .rank { color: var(--silver); }
+  .rank-3 .rank { color: var(--bronze); }
+
+  .rank-medal {
+    font-size: 18px;
+    margin-left: 4px;
+  }
+
+  .team-info {
+    padding-left: 16px;
+  }
+
+  .team-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .team-members {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .team-motto {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    opacity: 0.6;
+  }
+
+  /* ---- Score + Progress ---- */
+  .score-area {
+    text-align: right;
+    padding-right: 24px;
+  }
+
+  .score-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    transition: all 0.3s ease;
+  }
+
+  .score-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--team-color, var(--accent));
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    border-radius: 0 3px 3px 0;
+  }
+
+  .progress-text {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    border-left: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  .sidebar-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .phase-card {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .phase-card.active {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .phase-card.completed {
+    border-color: var(--green);
+    opacity: 0.7;
+  }
+
+  .phase-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .phase-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .phase-status {
+    font-size: 14px;
+  }
+
+  /* ---- Activity Feed ---- */
+  .feed-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    font-size: 13px;
+    animation: slide-in 0.4s ease-out;
+  }
+
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .feed-item .feed-team {
+    font-weight: 600;
+  }
+
+  .feed-item .feed-time {
+    font-size: 11px;
+    color: var(--muted);
+    float: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .feed-item .feed-detail {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ---- Stats ---- */
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 900;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ---- Confetti ---- */
+  .confetti-piece {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confetti-fall linear forwards;
+  }
+
+  @keyframes confetti-fall {
+    0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ---- No-data state ---- */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    gap: 16px;
+    color: var(--muted);
+  }
+
+  .empty-state .icon {
+    font-size: 64px;
+    opacity: 0.3;
+  }
+
+  .empty-state p {
+    font-size: 18px;
+    font-weight: 300;
+  }
+
+  /* ---- Countdown ---- */
+  .countdown {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 900;
+    text-align: center;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .countdown.warning {
+    color: var(--gold);
+    border-color: rgba(245, 158, 11, 0.3);
+    animation: pulse-border 1s ease-in-out infinite;
+  }
+
+  .countdown.danger {
+    color: var(--red);
+    border-color: rgba(239, 68, 68, 0.3);
+    animation: pulse-border 0.5s ease-in-out infinite;
+  }
+
+  .countdown-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="event-title">
+    <h1>Copilot Dev Day</h1>
+    <span class="subtitle">Hackathon Leaderboard</span>
+  </div>
+  <div class="header-right">
+    <div class="phase-badge" id="phase-badge">PHASE 1 — RESCUE</div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="leaderboard" id="leaderboard">
+    <div class="empty-state">
+      <div class="icon">🚀</div>
+      <p>Waiting for scores...</p>
+      <p style="font-size:13px">The hackathon hasn't started yet</p>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Phase Timer</h3>
+      <div class="countdown" id="countdown">25:00</div>
+      <div class="countdown-label">Time Remaining</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Phases</h3>
+      <div id="phases-list"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Stats</h3>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-teams">0</div>
+          <div class="stat-label">Teams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total Pts</div>
+        </div>
+      </div>
+      <div class="stats-row" style="margin-top:8px">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-leader">—</div>
+          <div class="stat-label">Leader</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-gap">—</div>
+          <div class="stat-label">Gap</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Activity</h3>
+      <div id="activity-feed"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  Spectator Mode — Big Screen Leaderboard
+//  Fetches from the hackathon API and renders in real-time
+// ============================================================
+
+const API_BASE = window.location.origin;
+const MAX_SCORE = 700;
+const REFRESH_MS = 3000;
+const MEDALS = ['🥇', '🥈', '🥉'];
+
+// State
+let previousRankings = [];
+let previousLeader = null;
+let activityLog = [];
+
+// Phases config
+const PHASES = [
+  { id: 'rescue',   name: 'Phase 1 — Rescue',       pts: 100, duration: 25 },
+  { id: 'debug',    name: 'Phase 2 — Bug Hunt',      pts: 150, duration: 30 },
+  { id: 'features', name: 'Phase 3 — Feature Frenzy', pts: 200, duration: 40 },
+  { id: 'finals',   name: 'Phase 4 — Final Boss',    pts: 250, duration: 30 },
+];
+
+let currentPhaseIndex = 0;
+let timerSeconds = PHASES[0].duration * 60;
+let timerRunning = false;
+
+// ---- Clock ----
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ---- Phases sidebar ----
+function renderPhases() {
+  const container = document.getElementById('phases-list');
+  container.innerHTML = PHASES.map((p, i) => {
+    const cls = i === currentPhaseIndex ? 'active' : i < currentPhaseIndex ? 'completed' : '';
+    const icon = i < currentPhaseIndex ? '✅' : i === currentPhaseIndex ? '▶️' : '⏳';
+    return `<div class="phase-card ${cls}">
+      <div>
+        <div class="phase-name">${p.name}</div>
+        <div class="phase-pts">${p.pts} pts</div>
+      </div>
+      <div class="phase-status">${icon}</div>
+    </div>`;
+  }).join('');
+}
+renderPhases();
+
+// ---- Timer ----
+function updateTimer() {
+  if (!timerRunning) return;
+  timerSeconds--;
+  if (timerSeconds < 0) {
+    timerSeconds = 0;
+    timerRunning = false;
+  }
+  renderTimer();
+}
+
+function renderTimer() {
+  const el = document.getElementById('countdown');
+  const min = Math.floor(timerSeconds / 60);
+  const sec = timerSeconds % 60;
+  el.textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+  el.classList.remove('warning', 'danger');
+  if (timerSeconds <= 60) el.classList.add('danger');
+  else if (timerSeconds <= 300) el.classList.add('warning');
+}
+
+setInterval(updateTimer, 1000);
+renderTimer();
+
+// ---- Keyboard Controls ----
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    timerRunning = !timerRunning;
+  }
+  if (e.key === 'ArrowRight' || e.key === 'n') {
+    currentPhaseIndex = Math.min(currentPhaseIndex + 1, PHASES.length - 1);
+    timerSeconds = PHASES[currentPhaseIndex].duration * 60;
+    timerRunning = false;
+    document.getElementById('phase-badge').textContent =
+      PHASES[currentPhaseIndex].name.toUpperCase();
+    renderPhases();
+    renderTimer();
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'p') {
+    currentPhaseIndex = Math.max(currentPhaseIndex - 1, 0);
+    timerSeconds = PHASES[currentPhaseIndex].duration * 60;
+    timerRunning = false;
+    document.getElementById('phase-badge').textContent =
+      PHASES[currentPhaseIndex].name.toUpperCase();
+    renderPhases();
+    renderTimer();
+  }
+  if (e.key === 'r') {
+    timerSeconds = PHASES[currentPhaseIndex].duration * 60;
+    timerRunning = false;
+    renderTimer();
+  }
+});
+
+// ---- Confetti ----
+function fireConfetti() {
+  const colors = ['#f59e0b', '#3b82f6', '#22c55e', '#ec4899', '#8b5cf6', '#ef4444'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.width = (Math.random() * 8 + 4) + 'px';
+    piece.style.height = (Math.random() * 8 + 4) + 'px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    piece.style.animationDelay = (Math.random() * 1) + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ---- Leaderboard Rendering ----
+function renderLeaderboard(data) {
+  const container = document.getElementById('leaderboard');
+
+  if (!data || data.length === 0) return;
+
+  // Sort descending by totalScore (the API may have the bug — we fix it here)
+  data.sort((a, b) => b.totalScore - a.totalScore);
+
+  // Detect score changes for activity feed
+  data.forEach((entry, i) => {
+    const prev = previousRankings.find(p => p.team.id === entry.team.id);
+    if (prev && prev.totalScore !== entry.totalScore) {
+      const delta = entry.totalScore - prev.totalScore;
+      addActivity(entry.team.name, `+${delta} pts`, entry.team.color);
+    }
+  });
+
+  // Detect leader change
+  const currentLeader = data[0]?.team.id;
+  if (previousLeader && currentLeader !== previousLeader && data[0]?.totalScore > 0) {
+    fireConfetti();
+    addActivity(data[0].team.name, '👑 TAKES THE LEAD!', data[0].team.color);
+  }
+  previousLeader = currentLeader;
+
+  // Update stats
+  document.getElementById('stat-teams').textContent = data.length;
+  const totalPts = data.reduce((sum, e) => sum + e.totalScore, 0);
+  document.getElementById('stat-total').textContent = totalPts;
+
+  if (data[0]?.totalScore > 0) {
+    const leaderName = data[0].team.name.length > 8
+      ? data[0].team.name.substring(0, 8) + '…'
+      : data[0].team.name;
+    document.getElementById('stat-leader').textContent = leaderName;
+    document.getElementById('stat-leader').style.fontSize = '16px';
+  }
+
+  if (data.length >= 2 && data[0].totalScore > 0) {
+    const gap = data[0].totalScore - data[1].totalScore;
+    document.getElementById('stat-gap').textContent = gap === 0 ? 'TIE' : `+${gap}`;
+  }
+
+  // Build rows
+  const html = data.map((entry, index) => {
+    const rank = index + 1;
+    const pct = Math.min((entry.totalScore / MAX_SCORE) * 100, 100);
+    const medal = index < 3 ? `<span class="rank-medal">${MEDALS[index]}</span>` : '';
+    const prev = previousRankings.find(p => p.team.id === entry.team.id);
+    const changed = prev && prev.totalScore !== entry.totalScore;
+
+    return `<div class="board-row rank-${rank} ${changed ? 'score-flash' : ''}"
+                 style="--team-color: ${entry.team.color}">
+      <div class="rank">${rank}${medal}</div>
+      <div class="team-info">
+        <div class="team-name">${entry.team.name}</div>
+        <div class="team-members">${entry.team.members?.join(', ') || ''}</div>
+        <div class="team-motto">"${entry.team.motto || ''}"</div>
+      </div>
+      <div class="score-area">
+        <div class="score-value">${entry.totalScore}</div>
+        <div class="score-label">Points</div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-track">
+          <div class="progress-fill" style="width: ${pct}%; background: ${entry.team.color}"></div>
+        </div>
+        <div class="progress-text">${Math.round(pct)}% of ${MAX_SCORE}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = html;
+  previousRankings = JSON.parse(JSON.stringify(data));
+}
+
+// ---- Activity Feed ----
+function addActivity(team, detail, color) {
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  activityLog.unshift({ team, detail, time, color });
+  if (activityLog.length > 8) activityLog.pop();
+  renderActivity();
+}
+
+function renderActivity() {
+  const container = document.getElementById('activity-feed');
+  container.innerHTML = activityLog.map(item =>
+    `<div class="feed-item">
+      <span class="feed-time">${item.time}</span>
+      <span class="feed-team" style="color: ${item.color}">${item.team}</span>
+      <div class="feed-detail">${item.detail}</div>
+    </div>`
+  ).join('');
+}
+
+// ---- Data Fetching ----
+async function fetchLeaderboard() {
+  try {
+    const res = await fetch(API_BASE + '/api/leaderboard');
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    renderLeaderboard(data);
+  } catch {
+    // API not available — show demo data or keep waiting
+    console.log('Waiting for API at', API_BASE);
+  }
+}
+
+// Initial fetch + polling
+fetchLeaderboard();
+setInterval(fetchLeaderboard, REFRESH_MS);
+
+// ---- Instructions overlay (shown briefly on load) ----
+(function showInstructions() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; font-family: Inter, sans-serif; color: #e2e8f0;
+    cursor: pointer;
+  `;
+  overlay.innerHTML = `
+    <div style="text-align:center; max-width: 500px">
+      <h2 style="font-size:32px; font-weight:900; margin-bottom:24px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Spectator Mode
+      </h2>
+      <div style="text-align:left; font-size:16px; line-height:2">
+        <div><kbd style="background:#1e293b; padding:4px 10px; border-radius:4px; font-family:JetBrains Mono">Space</kbd> Start / pause timer</div>
+        <div><kbd style="background:#1e293b; padding:4px 10px; border-radius:4px; font-family:JetBrains Mono">→ / N</kbd> Next phase</div>
+        <div><kbd style="background:#1e293b; padding:4px 10px; border-radius:4px; font-family:JetBrains Mono">← / P</kbd> Previous phase</div>
+        <div><kbd style="background:#1e293b; padding:4px 10px; border-radius:4px; font-family:JetBrains Mono">R</kbd> Reset timer</div>
+      </div>
+      <p style="margin-top:24px; color:#64748b; font-size:14px">
+        Click anywhere or press any key to dismiss
+      </p>
+    </div>
+  `;
+  overlay.addEventListener('click', () => overlay.remove());
+  document.addEventListener('keydown', function dismiss() {
+    overlay.remove();
+    document.removeEventListener('keydown', dismiss);
+  }, { once: true });
+  document.body.appendChild(overlay);
+
+  // Auto-dismiss after 8s
+  setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 8000);
+})();
+</script>
+</body>
+</html>

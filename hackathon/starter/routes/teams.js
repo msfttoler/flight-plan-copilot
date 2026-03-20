@@ -1,3 +1,8 @@
+// ============================================================
+// teams.js — CRUD operations for hackathon teams
+// "I tested it with Postman and it worked" — The Intern
+// Spoiler: it did not work.
+// ============================================================
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
@@ -12,6 +17,7 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
     // BUG: req.params.id is always a string ("1"), but db stores numbers (1)
     // _.find with { id: "1" } won't match { id: 1 }
+    // The intern's note: "JavaScript types are just a suggestion"
     var team = db.getTeam(req.params.id);
     if (!team) {
         res.status(404).json({ error: 'Team not found' });
@@ -49,6 +55,7 @@ router.delete('/:id', function(req, res) {
 
     // BUG: forward iteration with splice — skips the element after a match
     // Also: doesn't clean up that team's scores
+    // Fun fact: this once caused a team to become immortal during rehearsal
     for (var i = 0; i < teams.length; i++) {
         if (teams[i].id === id) {
             teams.splice(i, 1);

@@ -1,10 +1,28 @@
-# Flight Plan: GitHub Copilot Dev Day
+# ✈️ Flight Plan: GitHub Copilot Dev Day
 
-> *"From Curious to Dangerous in Four Hours"*
+> **"We forgot to build the leaderboard."**
+>
+> That's the premise. You have 4 hours. Your team's got Copilot.
+> The leaderboard you build is the one tracking your score. *No pressure.*
 
-A 4-hour hackathon where participants learn GitHub Copilot by building a real hackathon leaderboard — the one tracking *their own scores*. No slides. No toy examples. You learn by rescuing legacy code, hunting bugs, shipping features, and demoing to the room.
+A hackathon-driven workshop where teams learn GitHub Copilot by building — and competing on — the event's own live leaderboard. No death-by-slides. Every Copilot skill is earned under the clock.
 
-**The Premise:** _"We're running a hackathon today... but we forgot to build the leaderboard. We found some code from last year's intern. Fix it. Improve it. Ship it. Best dashboard wins."_
+---
+
+## The Concept
+
+The event organizers "forgot" to build the hackathon leaderboard. All they have is a terrible Express.js app written by a fictional intern — riddled with bugs, legacy patterns, and questionable life choices. Teams must rescue it, fix it, extend it, and transform it into something spectacular. **The leaderboard they build is the one tracking their own scores.**
+
+```
+  ┌──────────────────────────────────────────────────┐
+  │  Phase 1: RESCUE        "Make it not crash"       │
+  │  Phase 2: DEBUG         "Make it not lie"          │
+  │  Phase 3: FEATURES      "Make it not boring"       │
+  │  Phase 4: FINALS        "Make it unbelievable"     │
+  └──────────────────────────────────────────────────┘
+```
+
+Each phase teaches real Copilot skills — ghost text, inline chat, prompt engineering, agent mode, testing — while teams race to earn points on the very board they're fixing.
 
 ---
 
@@ -12,206 +30,192 @@ A 4-hour hackathon where participants learn GitHub Copilot by building a real ha
 
 ```
 flight-plan-copilot/
-├── hackathon/                         ← THE MAIN EVENT
-│   ├── HACKATHON-GUIDE.md             # Presenter master script (full 4-hour walkthrough)
-│   ├── starter/                       # Legacy leaderboard code (intentionally terrible)
-│   │   ├── package.json               #   Old deps: moment, body-parser, lodash
-│   │   ├── server.js                  #   var, require, callbacks, error leak
-│   │   ├── db.js                      #   In-memory store, sort bugs, mutable state
-│   │   ├── routes/teams.js            #   Team CRUD, type bugs, splice bug
-│   │   ├── routes/leaderboard.js      #   Score tracking, no validation
-│   │   ├── views/dashboard.ejs        #   Basic table, no refresh, no colors
-│   │   └── public/style.css           #   Bare minimum grey styling
-│   ├── challenges/                    # Phase guides (one per round)
-│   │   ├── phase-1-rescue.md          #   Modernize the legacy code
-│   │   ├── phase-2-debug.md           #   Find and fix 12 bugs
-│   │   ├── phase-3-features.md        #   Build from a feature menu
-│   │   └── phase-4-finals.md          #   Polish, demo, judging
-│   └── judging/                       # Scoring materials
-│       ├── RUBRIC.md                  #   Detailed criteria per phase
-│       └── scorecard.html             #   Printable per-team scorecard
-├── demos/                             ← SUPPLEMENTARY DEMOS (original workshop materials)
-│   ├── DEMO-SCRIPT.md
-│   ├── 01-legacy-upgrade/
-│   ├── 02-webapp-to-containers/
-│   └── 03-quick-wins/
-├── docs/
-│   ├── copilot-workshop/              # Workshop curriculum (14 modules)
-│   ├── CHEAT-SHEET.md                 # Presenter prompt reference
-│   ├── QUICK-REFERENCE.md             # Participant handout
-│   ├── quick-reference-card.html      # Full-page graphic reference card
-│   ├── quick-reference-3x5.html       # 3×5 index card version
-│   ├── quick-reference-4x6.html       # 4×6 print card
-│   └── quick-reference-ultimate.html  # Ultra-dense single-page (sticker-ready)
-├── .github/
-│   ├── copilot-instructions.md        # Repo-wide Copilot behavior config
-│   └── skills/branch-first/           # Skill: always branch before editing
-├── setup.sh                           # One-command environment setup
-└── README.md
+├── hackathon/
+│   ├── HACKATHON-GUIDE.md          # Full 4-hour presenter script
+│   ├── starter/                    # The intern's code (intentionally terrible)
+│   │   ├── server.js               # Express server — var, require, bugs galore
+│   │   ├── db.js                   # In-memory data store (mutable, unsorted)
+│   │   ├── routes/teams.js         # Team CRUD — type bugs, splice bugs
+│   │   ├── routes/leaderboard.js   # Scoring — no validation, type coercion
+│   │   ├── views/dashboard.ejs     # HTML — no auto-refresh, no style
+│   │   ├── public/style.css        # "Minimum viable styling"
+│   │   └── package.json            # moment, lodash, body-parser (all wrong)
+│   ├── challenges/                 # Phase-by-phase guides for teams
+│   │   ├── phase-1-rescue.md       # Modernize and stabilize
+│   │   ├── phase-2-debug.md        # Find and fix the 12+ bugs
+│   │   ├── phase-3-features.md     # Add real-time, charts, themes
+│   │   └── phase-4-finals.md       # Go wild — animations, sound, AI
+│   ├── judging/
+│   │   ├── RUBRIC.md               # Scoring breakdown (800 pts total)
+│   │   └── scorecard.html          # Printable interactive scorecard
+│   └── spectator/
+│       ├── big-screen.html         # Projector-ready animated leaderboard
+│       └── seed-scores.js          # Populate demo data for testing
+├── docs/copilot-workshop/          # Workshop curriculum (14 modules)
+├── demos/                          # Standalone Copilot demo suite
+│   ├── 01-legacy-upgrade/          # Express modernization demo
+│   ├── 02-webapp-to-containers/    # App Service → Container Apps
+│   └── 03-quick-wins/              # Bug hunt, test gen, two-minute wow
+└── setup.sh                        # One-command setup for everything
 ```
 
 ---
 
-## The Hackathon
-
-### How It Works
-
-Teams of 2-4 receive a broken, legacy Express.js leaderboard app. Over 4 phases, they use GitHub Copilot to rescue, debug, enhance, and ship it. Each phase teaches real Copilot skills while earning points on the very dashboard they're building.
-
-### The Schedule
-
-| Time | Phase | Duration | What Happens |
-|------|-------|----------|--------------|
-| 0:00 | **Opening** | 10 min | Welcome, the "oh no" reveal, team formation |
-| 0:10 | **Copilot 101** | 15 min | Crash course: ghost text, inline chat, chat panel |
-| 0:25 | **Phase 1 — Rescue** | 25 min | Modernize legacy code: var→const, require→import, kill moment/lodash/body-parser |
-| 0:50 | **Scoring + Break** | 10 min | Score Phase 1 |
-| 1:00 | **Prompt Engineering** | 15 min | CRAFT framework, slash commands, bad vs good prompts |
-| 1:15 | **Phase 2 — Bug Hunt** | 30 min | Find and fix 12 bugs hiding in the leaderboard |
-| 1:45 | **Scoring + Break** | 15 min | Score Phase 2 |
-| 2:00 | **Feature Demo** | 10 min | Show what's possible — add auto-refresh in 30 seconds |
-| 2:10 | **Phase 3 — Feature Frenzy** | 40 min | Build features from a tiered menu (20+ options) |
-| 2:50 | **Scoring + Break** | 10 min | Score Phase 3 |
-| 3:00 | **Advanced Tips** | 10 min | Copilot CLI, agent mode, custom instructions |
-| 3:10 | **Phase 4 — Final Polish** | 15 min | Last touches before demos |
-| 3:25 | **Demo Showcase** | 20 min | Each team demos their dashboard (2 min each) |
-| 3:45 | **Voting + Awards** | 10 min | Audience votes, winner crowned |
-| 3:55 | **Wrap-Up** | 5 min | Five things to remember |
-
-### The Scoring
-
-| Phase | Max Points | What's Measured |
-|-------|-----------|-----------------|
-| Phase 1 — Rescue | 100 | Code modernized, server runs, deps removed |
-| Phase 2 — Bug Hunt | 150 | Bugs found and fixed (12 bugs total) |
-| Phase 3 — Features | 200 | Features built from the menu (tiered points) |
-| Phase 4 — Final Boss | 250 | Demo quality, code quality, audience vote, bonuses |
-| **Grand Total** | **700** | + up to 140 bonus points |
-
-### The Awards
-
-| Award | For |
-|-------|-----|
-| 🏆 **Grand Champion** | Highest total score |
-| 🎨 **Best Design** | Prettiest dashboard |
-| 🐛 **Bug Slayer** | Most Phase 2 points |
-| 🚀 **Feature Machine** | Most Phase 3 features |
-| 💡 **Most Creative** | Wildest idea that actually worked |
-| 🤝 **Team Player** | Helped other teams the most |
-
----
-
-## The Starter Code
-
-The `hackathon/starter/` directory is an Express.js leaderboard app written in deliberately outdated, buggy JavaScript. It:
-
-- Uses `var`, `require()`, callbacks (not `const`/`let`, `import`, `async/await`)
-- Depends on `moment` (deprecated), `body-parser` (redundant), `lodash` (unnecessary)
-- Contains **12 intentional bugs** including wrong sort order, type mismatches, mutable shared state, missing validation, forward-splice during iteration, stack trace leaks
-- Has a bare-minimum grey stylesheet with no dark mode, no animations, no team colors
-- Shows only 3 of 6 teams (the join is broken)
-- Never auto-refreshes
-- Has no score submission UI (judges have to use `curl`)
-
-**This is the canvas.** Teams transform it into something worth putting on the big screen.
-
-### Quick Start
+## Quick Start
 
 ```bash
+# Clone and set up
+git clone https://github.com/msfttoler/flight-plan-copilot.git
+cd flight-plan-copilot
+bash setup.sh
+
+# Start the (broken) leaderboard
 cd hackathon/starter
 npm install
-node server.js
-# Open http://localhost:3000
+npm start
+# → http://localhost:3000
 ```
+
+Open in VS Code. Open Copilot Chat. Start fixing things. That's the whole event.
+
+---
+
+## How the Hackathon Works
+
+### Phase 1 — Rescue Mission (45 min, 200 pts)
+
+> *"The code runs… sort of. Your job: make it not crash."*
+
+Teams use Copilot to modernize the intern's code — `var` → `const`/`let`, `require` → ES modules, remove deprecated deps. Copilot skills: **ghost text completions, inline chat, code modernization prompts.**
+
+### Phase 2 — Bug Hunt (45 min, 200 pts)
+
+> *"It runs. It just lies about everything."*
+
+12+ deliberate bugs: ascending sort (last place on top), string/number type mismatches, forward-splice deletion, mutable state leaks, missing validation. Teams use Copilot to find and fix them all. Copilot skills: **`/fix`, targeted prompts, code reasoning.**
+
+### Phase 3 — Feature Build (60 min, 200 pts)
+
+> *"It works. Now make it not boring."*
+
+Add auto-refresh, team color badges, score submission forms, charts, animations, dark/light themes. Copilot skills: **prompt engineering, multi-file edits, agent mode, test generation.**
+
+### Phase 4 — The Finals (30 min, 200 pts)
+
+> *"Make it something you'd be proud to demo."*
+
+Open-ended. Sound effects, confetti, real-time WebSockets, AI-generated team names, particle systems — anything goes. Teams demo live. Copilot skills: **everything.**
+
+### Scoring
+
+| Category | Points | Notes |
+|----------|--------|-------|
+| Phase 1: Rescue | 200 | Modernization, deps, no crashes |
+| Phase 2: Debug | 200 | Bug fixes (verified by tests) |
+| Phase 3: Features | 200 | Working features, code quality |
+| Phase 4: Finals | 200 | Creativity, polish, wow factor |
+| **Total** | **800** | |
+
+**Bonus points** for test coverage, accessibility, documentation, and making the judges laugh.
+
+Full rubric: [`hackathon/judging/RUBRIC.md`](hackathon/judging/RUBRIC.md)
 
 ---
 
 ## The Bug Catalog (Presenter Reference)
 
-| # | Bug | File | Fix |
-|---|-----|------|-----|
-| 1 | Sort ascending (lowest first) | `db.js`, `server.js` | `b.totalScore - a.totalScore` |
-| 2 | Teams 4-6 missing from dashboard | `server.js` root route | Use `db.getLeaderboard()` or fix the join |
-| 3 | `GET /api/teams/1` returns 404 | `routes/teams.js` | `parseInt(req.params.id)` |
-| 4 | `GET /api/leaderboard/team/1` empty | `routes/leaderboard.js` | `parseInt(req.params.teamId)` |
-| 5 | Score POST type mismatch | `routes/leaderboard.js` | Parse teamId to number |
-| 6 | Accepts 99999 pts for a 100-pt challenge | `routes/leaderboard.js` | Validate `points <= challenge.maxPoints` |
-| 7 | lastUpdated shows wrong timestamp | `db.js` | Take most recent, not first |
-| 8 | Delete forward-splice skips entries | `routes/teams.js` | Use `findIndex` + single splice |
-| 9 | `getTeams()` returns mutable reference | `db.js` | Return a copy |
-| 10 | Dashboard never refreshes | `views/dashboard.ejs` | Add meta-refresh or JS polling |
-| 11 | Team colors not displayed | `views/dashboard.ejs` | Apply color as style |
-| 12 | Error handler leaks stack traces | `server.js` | Conditional on NODE_ENV |
+The starter code contains 12+ intentional bugs. Here's the hit list:
+
+| # | File | Bug | Impact |
+|---|------|-----|--------|
+| 1 | `db.js` | `getLeaderboard()` sorts ascending — last place shows first | Scores are backwards |
+| 2 | `db.js` | `getLeaderboard()` uses inner join — teams with 0 scores vanish | New teams invisible |
+| 3 | `db.js` | `getTeams()` returns mutable reference — mutations leak | Shared state corruption |
+| 4 | `db.js` | `addScore()` uses `new Date().toString()` — inconsistent format | Timestamps look random |
+| 5 | `routes/teams.js` | `getTeam(req.params.id)` — string `"1"` vs number `1` | 404 on valid teams |
+| 6 | `routes/teams.js` | DELETE forward-splice skips elements | Teams survive deletion |
+| 7 | `routes/teams.js` | No input validation on POST | Empty/garbage teams |
+| 8 | `routes/leaderboard.js` | `teamId` type coercion — string vs number | Scores attach to ghosts |
+| 9 | `routes/leaderboard.js` | No max points validation | Submit 99999 points |
+| 10 | `routes/leaderboard.js` | Negative points accepted | Sabotage other teams |
+| 11 | `server.js` | Error handler leaks stack traces | Security vulnerability |
+| 12 | `server.js` | Uses deprecated `body-parser` | Unnecessary dependency |
+| 13 | `dashboard.ejs` | No auto-refresh | Page goes stale |
+| 14 | `dashboard.ejs` | Team color never applied | All teams look identical |
+
+---
+
+## Spectator Mode (Big Screen)
+
+Run the animated leaderboard on the venue projector:
+
+1. Start the hackathon server: `cd hackathon/starter && npm start`
+2. Open `hackathon/spectator/big-screen.html` in a browser
+3. Full-screen it (F11) on the projector
+
+**Features:** Animated score counters, rank-change transitions, phase timer with keyboard controls, confetti on lead changes, live activity feed, auto-refreshes every 3 seconds.
+
+**Keyboard shortcuts:**
+| Key | Action |
+|-----|--------|
+| `Space` | Start/pause phase timer |
+| `→` | Next phase |
+| `←` | Previous phase |
+| `R` | Reset timer |
+
+**Seed demo data** (to test before event):
+```bash
+cd hackathon/starter && npm start &
+node hackathon/spectator/seed-scores.js
+```
+
+---
+
+## Workshop Materials
+
+The repo also includes a full instructor curriculum and standalone demo suite, usable independently of the hackathon:
+
+| Resource | Path | Description |
+|----------|------|-------------|
+| Workshop Curriculum | `docs/copilot-workshop/` | 14 modules from basics to advanced |
+| Demo 1: Legacy Upgrade | `demos/01-legacy-upgrade/` | Modernize an Express app live |
+| Demo 2: Containerization | `demos/02-webapp-to-containers/` | App Service → Container Apps |
+| Demo 3: Quick Wins | `demos/03-quick-wins/` | Bug hunt, test gen, two-minute wow |
+| Cheat Sheet | `docs/CHEAT-SHEET.md` | Copilot shortcuts reference |
+| Quick Reference | `docs/QUICK-REFERENCE.md` | One-page command guide |
 
 ---
 
 ## Prerequisites
 
 ### Every Participant
+
 - GitHub account with Copilot enabled ([free tier](https://github.com/features/copilot) works)
-- VS Code with the GitHub Copilot extension
-- Node.js 18+
+- VS Code with GitHub Copilot + Copilot Chat extensions
+- Node.js 18+ and npm
+- Copilot Chat panel opens with `Ctrl+Shift+I` / `Cmd+Shift+I`
 
-### Presenter
-- All of the above, plus:
-- Print scorecards: `hackathon/judging/scorecard.html` (one per team)
-- Print or project phase guides: `hackathon/challenges/phase-*.md`
-- Read the full presenter script: `hackathon/HACKATHON-GUIDE.md`
-- Test the starter code: `cd hackathon/starter && npm install && node server.js`
+### Presenter / Facilitator
 
----
-
-## The Five Things to Remember
-
-1. **Copilot is a multiplier, not a replacement** — you made every decision today
-2. **Prompt quality = output quality** — CRAFT works (Context, Role, Attributes, Format, Tests)
-3. **Start rough, iterate fast** — don't agonize over the first prompt
-4. **Context is king** — open files, comments, custom instructions all feed Copilot
-5. **You built a full-stack app in 4 hours** — with a tool that's getting better every month
+- Everything above, plus:
+- Large display / projector for spectator mode
+- 20pt+ editor font for visibility
+- `setup.sh` run before the event
+- Read [`hackathon/HACKATHON-GUIDE.md`](hackathon/HACKATHON-GUIDE.md) cover to cover
 
 ---
 
-## Workshop Materials
+## Setup
 
-### Hackathon (Primary)
+```bash
+# One command does it all
+bash setup.sh
+```
 
-| Path | What It Is |
-|------|-----------|
-| [HACKATHON-GUIDE.md](hackathon/HACKATHON-GUIDE.md) | Presenter master script — full 4-hour walkthrough with talking points |
-| [phase-1-rescue.md](hackathon/challenges/phase-1-rescue.md) | Phase 1 guide — modernize the legacy code |
-| [phase-2-debug.md](hackathon/challenges/phase-2-debug.md) | Phase 2 guide — find and fix 12 bugs |
-| [phase-3-features.md](hackathon/challenges/phase-3-features.md) | Phase 3 guide — build features from tiered menu |
-| [phase-4-finals.md](hackathon/challenges/phase-4-finals.md) | Phase 4 guide — polish, demo, judging |
-| [RUBRIC.md](hackathon/judging/RUBRIC.md) | Detailed judging criteria per phase |
-| [scorecard.html](hackathon/judging/scorecard.html) | Printable per-team scorecard |
-
-### Participant Handouts
-
-| Path | What It Is |
-|------|-----------|
-| [QUICK-REFERENCE.md](docs/QUICK-REFERENCE.md) | Copilot shortcuts, CRAFT framework, tips |
-| [quick-reference-ultimate.html](docs/quick-reference-ultimate.html) | Ultra-dense single-page print card (~80 items) |
-| [quick-reference-4x6.html](docs/quick-reference-4x6.html) | 4×6 print card |
-| [quick-reference-3x5.html](docs/quick-reference-3x5.html) | 3×5 index card |
-| [quick-reference-card.html](docs/quick-reference-card.html) | Full-page graphic (great for screen share) |
-
-### Supplementary Demo Materials
-
-The original workshop demos are still available for standalone use or as presenter references:
-
-| Path | What It Is |
-|------|-----------|
-| [DEMO-SCRIPT.md](demos/DEMO-SCRIPT.md) | Demo presenter guide |
-| [01-legacy-upgrade/](demos/01-legacy-upgrade/legacy-app/) | Legacy Express 4 flight tracker API |
-| [02-webapp-to-containers/](demos/02-webapp-to-containers/webapp/) | Flight dashboard → Container Apps |
-| [03-quick-wins/](demos/03-quick-wins/) | Bug hunt, pricing engine, departure board |
-
-### Curriculum Reference
-
-Full workshop curriculum (14 modules) in [`docs/copilot-workshop/`](docs/copilot-workshop/) — covers Copilot essentials, prompt engineering, testing, documentation, and advanced features in detail.
+This checks tools, installs dependencies for both the hackathon starter and demo apps, and smoke-tests that everything runs.
 
 ---
 
 ## License
 
-Internal workshop materials. Not for redistribution without permission.
+MIT. Use it, fork it, run your own Copilot Dev Day.

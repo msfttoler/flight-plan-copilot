@@ -1,6 +1,7 @@
 // ============================================================
 //  In-memory data store — "database"
-//  This is fine. Everything is fine.
+//  "We'll move this to Postgres before the event" — Last year's intern
+//  Narrator: They did not move it to Postgres.
 // ============================================================
 
 var _ = require('lodash');

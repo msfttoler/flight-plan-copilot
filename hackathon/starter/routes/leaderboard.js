@@ -1,3 +1,8 @@
+// ============================================================
+// leaderboard.js — The main event. The scoreboard. The drama.
+// If you're reading this, something probably broke.
+// Known issue: scores sort backwards. "It adds character." — PM
+// ============================================================
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
@@ -36,6 +41,7 @@ router.post('/score', function(req, res) {
 
     // BUG: No validation — you can submit 99999 points for a 100-point challenge
     // BUG: No validation — negative points are accepted
+    // The intern's defense: "trust the judges" (the judges are also the contestants)
     var score = db.addScore(teamId, challengeId, points);
     res.json({ message: 'Score recorded', score: score });
 });

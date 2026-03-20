@@ -1,6 +1,12 @@
 // ============================================================
 //  Copilot Dev Day — Hackathon Leaderboard
 //  "Found this in last year's intern repo. Good luck." — Management
+//
+//  Known issues (according to the intern's commit messages):
+//    - "fixed the thing" (12 commits with this message)
+//    - "idk why this works but dont touch it"
+//    - "TODO: make it not ugly (low priority)"
+//    - "final final FINAL version v3"
 // ============================================================
 
 var express = require('express');
@@ -61,6 +67,24 @@ app.get('/health', function(req, res) {
     res.json({ status: 'ok', uptime: process.uptime() });
 });
 
+// Easter egg — the intern left this in
+app.get('/api/motivation', function(req, res) {
+    var quotes = [
+        "It's not a bug, it's a feature request.",
+        "Works on my machine. Ship it.",
+        "There are only two hard things in CS: cache invalidation, naming things, and off-by-one errors.",
+        "If debugging is the process of removing bugs, then programming must be the process of putting them in.",
+        "The best error message is the one that never shows up.",
+        "Code never lies. Comments sometimes do.",
+        "Give someone a program, frustrate them for a day. Teach them to program, frustrate them for a lifetime.",
+        "It compiles. Ship it.",
+        "Pro tip: console.log is a valid debugging strategy.",
+        "Weeks of coding can save you hours of planning."
+    ];
+    var quote = quotes[Math.floor(Math.random() * quotes.length)];
+    res.json({ motivation: quote, from: 'The Intern (2025)' });
+});
+
 // Error handler
 app.use(function(err, req, res, next) {
     console.error(err.stack);
@@ -71,8 +95,16 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(PORT, function() {
-    console.log('='.repeat(50));
-    console.log('  Hackathon Leaderboard');
-    console.log('  http://localhost:' + PORT);
-    console.log('='.repeat(50));
+    console.log('');
+    console.log('  ╔═══════════════════════════════════════════════╗');
+    console.log('  ║                                               ║');
+    console.log('  ║   ✈️  COPILOT DEV DAY — HACKATHON             ║');
+    console.log('  ║                                               ║');
+    console.log('  ║   Leaderboard: http://localhost:' + PORT + '          ║');
+    console.log('  ║   API:         http://localhost:' + PORT + '/api      ║');
+    console.log('  ║                                               ║');
+    console.log('  ║   Status: "works on my machine" ¯\\_(ツ)_/¯    ║');
+    console.log('  ║                                               ║');
+    console.log('  ╚═══════════════════════════════════════════════╝');
+    console.log('');
 });

@@ -1,6 +1,8 @@
 /* ============================================================
    Hackathon Leaderboard — "Minimum Viable Styling"
    Last year's intern did their best. Bless their heart.
+   Design review feedback: "it looks like a spreadsheet"
+   Intern's response: "spreadsheets are a valid design language"
    ============================================================ */
 
 body {
@@ -78,5 +80,8 @@ th {
 /* That's it. That's the whole stylesheet.
    No dark mode. No animations. No responsive.
    No team colors. No progress bars. No life.
+   No hover states. No transitions. No joy.
+   Just vibes. Sad, grey, Times-New-Roman-adjacent vibes.
+   Your mission: make this thing BEAUTIFUL.
    Just a grey table on a grey background.
    This is your canvas. Make it better. */
