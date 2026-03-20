@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Copilot — Quick Reference Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0d1b2a;
+    --dark:    #1b2838;
+    --panel:   #1e2d3d;
+    --accent:  #58a6ff;
+    --gold:    #f0c040;
+    --green:   #3fb950;
+    --orange:  #f08030;
+    --pink:    #f778ba;
+    --text:    #e6edf3;
+    --muted:   #8b949e;
+    --border:  #30404d;
+    --radius:  10px;
+  }
+
+  html { font-size: 14px; }
+
+  @media print {
+    html { font-size: 11.5px; }
+    body { padding: 0; }
+    .page { box-shadow: none; border: none; page-break-inside: avoid; }
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0e14;
+    color: var(--text);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1080px;
+    background: var(--navy);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #161b22 0%, #0d1b2a 100%);
+    padding: 1.4rem 2rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  .header svg { flex-shrink: 0; }
+  .header h1 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .subtitle {
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .grid > .card { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .grid > .card:nth-child(3n) { border-right: none; }
+  .grid > .card:nth-last-child(-n+3) { border-bottom: none; }
+
+  /* full-width cards */
+  .grid > .card.full { grid-column: 1 / -1; border-right: none; }
+  .grid > .card.span2 { grid-column: span 2; }
+
+  .card {
+    padding: 1.1rem 1.3rem;
+  }
+  .card-title {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: .65rem;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+  }
+  .card-title .icon {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    flex-shrink: 0;
+  }
+  .blue  .card-title { color: var(--accent); }
+  .gold  .card-title { color: var(--gold); }
+  .green .card-title { color: var(--green); }
+  .orange .card-title { color: var(--orange); }
+  .pink  .card-title { color: var(--pink); }
+
+  .blue  .icon { background: rgba(88,166,255,.15); }
+  .gold  .icon { background: rgba(240,192,64,.15); }
+  .green .icon { background: rgba(63,185,80,.15); }
+  .orange .icon { background: rgba(240,128,48,.15); }
+  .pink  .icon { background: rgba(247,120,186,.15); }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  th { text-align: left; font-weight: 600; color: var(--muted); font-size: .7rem;
+       text-transform: uppercase; letter-spacing: .06em; padding: .3rem .5rem; }
+  td { padding: .35rem .5rem; border-top: 1px solid rgba(48,64,77,.5); }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+
+  kbd {
+    display: inline-block;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: .05rem .35rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  code {
+    background: rgba(88,166,255,.1);
+    color: var(--accent);
+    padding: .1rem .3rem;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: .78rem;
+  }
+
+  /* ── Mode pills ── */
+  .modes { display: flex; flex-direction: column; gap: .55rem; }
+  .mode {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    background: var(--dark);
+    border-radius: 8px;
+    padding: .55rem .75rem;
+    border: 1px solid var(--border);
+  }
+  .mode-badge {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .mode-badge.ghost  { background: linear-gradient(135deg, #1a3a5c, #0d2240); }
+  .mode-badge.inline { background: linear-gradient(135deg, #2a1a4c, #1a0d3a); }
+  .mode-badge.panel  { background: linear-gradient(135deg, #1a3a2c, #0d2a1a); }
+  .mode-name { font-weight: 700; font-size: .85rem; }
+  .mode-key  { color: var(--muted); font-size: .75rem; }
+  .mode-desc { color: var(--muted); font-size: .75rem; margin-top: 1px; }
+
+  /* ── CRAFT ── */
+  .craft-grid { display: flex; flex-direction: column; gap: .4rem; }
+  .craft-row {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .craft-letter {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+  .craft-row:nth-child(1) .craft-letter { background: rgba(88,166,255,.2); color: var(--accent); }
+  .craft-row:nth-child(2) .craft-letter { background: rgba(63,185,80,.2); color: var(--green); }
+  .craft-row:nth-child(3) .craft-letter { background: rgba(240,192,64,.2); color: var(--gold); }
+  .craft-row:nth-child(4) .craft-letter { background: rgba(240,128,48,.2); color: var(--orange); }
+  .craft-row:nth-child(5) .craft-letter { background: rgba(247,120,186,.2); color: var(--pink); }
+  .craft-label { font-weight: 600; font-size: .82rem; width: 5rem; }
+  .craft-example { color: var(--muted); font-size: .78rem; font-style: italic; }
+
+  /* ── Tips ── */
+  .tips { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+  .tips li {
+    font-size: .8rem;
+    padding-left: 1.3rem;
+    position: relative;
+    line-height: 1.45;
+  }
+  .tips li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: .65rem;
+    top: 2px;
+  }
+
+  /* ── Decision tree ── */
+  .tree { display: flex; flex-direction: column; gap: .35rem; font-size: .8rem; }
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .tree-q {
+    color: var(--muted);
+    min-width: 14rem;
+  }
+  .tree-arrow { color: var(--gold); font-weight: 700; }
+  .tree-a { font-weight: 600; }
+
+  /* ── Footer ── */
+  .footer {
+    padding: .7rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .7rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ═══ Header ═══ -->
+  <div class="header">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#58a6ff" opacity=".3"/>
+      <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#58a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <h1>GitHub Copilot — Quick Reference</h1>
+      <div class="subtitle">Flight Plan: GitHub Copilot Dev Day &nbsp;·&nbsp; Keep this card open during the workshop</div>
+    </div>
+  </div>
+
+  <!-- ═══ Grid ═══ -->
+  <div class="grid">
+
+    <!-- ── Three Modes ── -->
+    <div class="card blue">
+      <div class="card-title"><span class="icon">✈</span> Three Ways to Talk to Copilot</div>
+      <div class="modes">
+        <div class="mode">
+          <div class="mode-badge ghost">👻</div>
+          <div>
+            <div class="mode-name">Ghost Text</div>
+            <div class="mode-key">Just start typing</div>
+            <div class="mode-desc">Completions, patterns, comment → code</div>
+          </div>
+        </div>
+        <div class="mode">
+          <div class="mode-badge inline">⚡</div>
+          <div>
+            <div class="mode-name">Inline Chat</div>
+            <div class="mode-key"><kbd>⌘</kbd> <kbd>I</kbd> &nbsp;/&nbsp; <kbd>Ctrl</kbd> <kbd>I</kbd></div>
+            <div class="mode-desc">Transform selected code, generate at cursor</div>
+          </div>
+        </div>
+        <div class="mode">
+          <div class="mode-badge panel">💬</div>
+          <div>
+            <div class="mode-name">Chat Panel</div>
+            <div class="mode-key"><kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>I</kbd> &nbsp;/&nbsp; <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>I</kbd></div>
+            <div class="mode-desc">Conversations, debugging, multi-step tasks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Shortcuts ── -->
+    <div class="card gold">
+      <div class="card-title"><span class="icon">⌨</span> Essential Shortcuts</div>
+      <table>
+        <tr><th>Action</th><th>Mac</th><th>Win / Linux</th></tr>
+        <tr><td>Accept</td><td><kbd>Tab</kbd></td><td><kbd>Tab</kbd></td></tr>
+        <tr><td>Dismiss</td><td><kbd>Esc</kbd></td><td><kbd>Esc</kbd></td></tr>
+        <tr><td>Next suggestion</td><td><kbd>⌥</kbd> <kbd>]</kbd></td><td><kbd>Alt</kbd> <kbd>]</kbd></td></tr>
+        <tr><td>Prev suggestion</td><td><kbd>⌥</kbd> <kbd>[</kbd></td><td><kbd>Alt</kbd> <kbd>[</kbd></td></tr>
+        <tr><td>Inline Chat</td><td><kbd>⌘</kbd> <kbd>I</kbd></td><td><kbd>Ctrl</kbd> <kbd>I</kbd></td></tr>
+        <tr><td>Chat Panel</td><td><kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>I</kbd></td><td><kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>I</kbd></td></tr>
+      </table>
+    </div>
+
+    <!-- ── Slash Commands + Participants ── -->
+    <div class="card green">
+      <div class="card-title"><span class="icon">/</span> Slash Commands</div>
+      <table>
+        <tr><th>Command</th><th>Does</th></tr>
+        <tr><td><code>/tests</code></td><td>Generate test suite</td></tr>
+        <tr><td><code>/fix</code></td><td>Fix bugs in selection</td></tr>
+        <tr><td><code>/doc</code></td><td>Generate documentation</td></tr>
+        <tr><td><code>/explain</code></td><td>Explain selected code</td></tr>
+      </table>
+      <div class="card-title" style="margin-top:.9rem;"><span class="icon">@</span> Chat Participants</div>
+      <table>
+        <tr><th>Participant</th><th>Does</th></tr>
+        <tr><td><code>@workspace</code></td><td>Search entire project</td></tr>
+        <tr><td><code>@vscode</code></td><td>VS Code settings &amp; features</td></tr>
+        <tr><td><code>@terminal</code></td><td>Recent terminal output</td></tr>
+      </table>
+    </div>
+
+    <!-- ── CRAFT Framework ── -->
+    <div class="card span2 orange">
+      <div class="card-title"><span class="icon">🛠</span> The CRAFT Framework — Write Better Prompts</div>
+      <div class="craft-grid">
+        <div class="craft-row">
+          <div class="craft-letter">C</div>
+          <div class="craft-label">Context</div>
+          <div class="craft-example">"In this Express.js REST API…"</div>
+        </div>
+        <div class="craft-row">
+          <div class="craft-letter">R</div>
+          <div class="craft-label">Role / Result</div>
+          <div class="craft-example">"Write a middleware that…"</div>
+        </div>
+        <div class="craft-row">
+          <div class="craft-letter">A</div>
+          <div class="craft-label">Attributes</div>
+          <div class="craft-example">"…with rate limiting, logging, error handling…"</div>
+        </div>
+        <div class="craft-row">
+          <div class="craft-letter">F</div>
+          <div class="craft-label">Format</div>
+          <div class="craft-example">"…as an ES module with JSDoc comments…"</div>
+        </div>
+        <div class="craft-row">
+          <div class="craft-letter">T</div>
+          <div class="craft-label">Tests</div>
+          <div class="craft-example">"…including edge cases for concurrent requests"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tips ── -->
+    <div class="card pink">
+      <div class="card-title"><span class="icon">💡</span> Tips That Make a Difference</div>
+      <ul class="tips">
+        <li><strong>Open relevant files</strong> before asking — Copilot reads your open tabs</li>
+        <li><strong>Name functions well</strong> — <code>calculateShippingCost</code> beats <code>calc</code></li>
+        <li><strong>Write the comment first</strong>, then let Copilot write the code</li>
+        <li><strong>Iterate in conversation</strong> — start rough, refine with follow-ups</li>
+        <li><strong>Always review</strong> — Copilot is a first draft, you are the editor</li>
+      </ul>
+    </div>
+
+    <!-- ── Decision Tree ── -->
+    <div class="card full blue">
+      <div class="card-title"><span class="icon">🧭</span> When to Use What</div>
+      <div class="tree">
+        <div class="tree-row">
+          <span class="tree-q">Know roughly what you want?</span>
+          <span class="tree-arrow">→</span>
+          <span class="tree-a">Ghost Text <span style="color:var(--muted)">(just type)</span></span>
+        </div>
+        <div class="tree-row">
+          <span class="tree-q">Have code to transform?</span>
+          <span class="tree-arrow">→</span>
+          <span class="tree-a">Inline Chat <span style="color:var(--muted)">(<kbd>⌘</kbd> <kbd>I</kbd>)</span></span>
+        </div>
+        <div class="tree-row">
+          <span class="tree-q">Need to think out loud?</span>
+          <span class="tree-arrow">→</span>
+          <span class="tree-a">Chat Panel <span style="color:var(--muted)">(<kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>I</kbd>)</span></span>
+        </div>
+        <div class="tree-row">
+          <span class="tree-q">Want tests, docs, or fixes?</span>
+          <span class="tree-arrow">→</span>
+          <span class="tree-a">Slash Commands <span style="color:var(--muted)">(<code>/tests</code> <code>/doc</code> <code>/fix</code>)</span></span>
+        </div>
+        <div class="tree-row">
+          <span class="tree-q">Need project-wide context?</span>
+          <span class="tree-arrow">→</span>
+          <span class="tree-a"><code>@workspace</code> <span style="color:var(--muted)">in Chat</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- ═══ Footer ═══ -->
+  <div class="footer">
+    <span>Flight Plan: GitHub Copilot Dev Day</span>
+    <span>github.com/msfttoler/flight-plan-copilot</span>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>

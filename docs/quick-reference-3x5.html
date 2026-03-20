@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Copilot Quick Reference — 3×5 Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #0d1117;
+    --card:    #161b22;
+    --panel:   #1c2333;
+    --accent:  #58a6ff;
+    --gold:    #e3b341;
+    --green:   #3fb950;
+    --orange:  #f0883e;
+    --pink:    #f778ba;
+    --purple:  #bc8cff;
+    --text:    #e6edf3;
+    --dim:     #8b949e;
+    --faint:   #30404d;
+    --line:    rgba(48,64,77,.6);
+  }
+
+  @page {
+    size: 5in 3in landscape;
+    margin: 0;
+  }
+
+  html { font-size: 7.5px; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  @media print {
+    html { font-size: 6.8px; }
+    body { padding: 0; gap: 0; background: #000; }
+    .card-face { box-shadow: none; border: none; margin: 0; border-radius: 0; }
+    .card-face + .card-face { page-break-before: always; }
+  }
+
+  /* ── Card face ── */
+  .card-face {
+    width: 5in;
+    height: 3in;
+    background: var(--card);
+    border: 1px solid var(--faint);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header bar ── */
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .35rem .65rem;
+    background: linear-gradient(90deg, #0d1b2a, #161b22);
+    border-bottom: 1.5px solid var(--accent);
+    flex-shrink: 0;
+  }
+  .bar-title {
+    font-weight: 900;
+    font-size: 1.15rem;
+    letter-spacing: -.02em;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .bar-sub { font-size: .78rem; color: var(--dim); }
+
+  /* ── Body ── */
+  .body { flex: 1; display: flex; min-height: 0; }
+
+  /* ── Columns ── */
+  .col { padding: .45rem .55rem; display: flex; flex-direction: column; gap: .35rem; }
+  .col-border { border-right: 1px solid var(--line); }
+
+  .col-1 { width: 32%; }
+  .col-2 { width: 36%; }
+  .col-3 { width: 32%; }
+
+  /* ── Section titles ── */
+  .sec {
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    margin-bottom: .1rem;
+    flex-shrink: 0;
+  }
+  .sec .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Compact tables ── */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-size: .62rem; font-weight: 600; color: var(--dim);
+    text-transform: uppercase; letter-spacing: .05em;
+    text-align: left; padding: .12rem .2rem;
+  }
+  td {
+    font-size: .82rem;
+    padding: .15rem .2rem;
+    border-top: 1px solid rgba(48,64,77,.35);
+    line-height: 1.3;
+    vertical-align: top;
+  }
+
+  kbd {
+    display: inline-block;
+    background: var(--bg);
+    border: 1px solid var(--faint);
+    border-radius: 2.5px;
+    padding: 0 .25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .72rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: .76rem;
+    color: var(--accent);
+    background: rgba(88,166,255,.1);
+    padding: 0 .2rem;
+    border-radius: 2px;
+  }
+
+  /* ── Mode rows ── */
+  .mode-row {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .2rem 0;
+    border-top: 1px solid rgba(48,64,77,.35);
+  }
+  .mode-row:first-of-type { border-top: none; }
+  .mode-icon {
+    width: 16px; height: 16px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    flex-shrink: 0;
+  }
+  .mode-icon.g { background: rgba(88,166,255,.15); }
+  .mode-icon.i { background: rgba(188,140,255,.15); }
+  .mode-icon.p { background: rgba(63,185,80,.15); }
+  .mode-info { line-height: 1.3; }
+  .mode-name { font-weight: 700; font-size: .82rem; }
+  .mode-key  { font-size: .72rem; color: var(--dim); }
+
+  /* ── CRAFT ── */
+  .craft { display: flex; flex-direction: column; gap: .15rem; }
+  .craft-row {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .8rem;
+    line-height: 1.3;
+  }
+  .craft-letter {
+    width: 15px; height: 15px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: .72rem;
+    flex-shrink: 0;
+  }
+  .cl-c { background: rgba(88,166,255,.2); color: var(--accent); }
+  .cl-r { background: rgba(63,185,80,.2); color: var(--green); }
+  .cl-a { background: rgba(227,179,65,.2); color: var(--gold); }
+  .cl-f { background: rgba(240,136,62,.2); color: var(--orange); }
+  .cl-t { background: rgba(247,120,186,.2); color: var(--pink); }
+  .craft-label { font-weight: 600; width: 3.8rem; flex-shrink: 0; }
+  .craft-eg { color: var(--dim); font-style: italic; font-size: .72rem; }
+
+  /* ── Tips ── */
+  .tips { list-style: none; display: flex; flex-direction: column; gap: .15rem; }
+  .tips li {
+    font-size: .78rem;
+    line-height: 1.35;
+    padding-left: .85rem;
+    position: relative;
+  }
+  .tips li::before {
+    content: '›';
+    position: absolute;
+    left: .1rem;
+    font-weight: 800;
+    color: var(--gold);
+  }
+
+  /* ── Decision tree ── */
+  .tree { display: flex; flex-direction: column; gap: .1rem; }
+  .tree-r {
+    display: flex;
+    align-items: baseline;
+    font-size: .78rem;
+    gap: .25rem;
+    line-height: 1.35;
+  }
+  .tree-q { color: var(--dim); }
+  .tree-a { font-weight: 700; white-space: nowrap; }
+  .arr { color: var(--gold); font-weight: 700; }
+
+  /* ── Footer ── */
+  .foot {
+    padding: .2rem .65rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: .62rem;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+
+  /* ── Back side label ── */
+  .side-label {
+    position: absolute;
+    top: .35rem;
+    right: .55rem;
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--dim);
+    opacity: .5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!--                  FRONT SIDE                      -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="card-face">
+  <div class="bar">
+    <span class="bar-title">GitHub Copilot — Quick Reference</span>
+    <span class="bar-sub">Flight Plan Dev Day</span>
+  </div>
+
+  <div class="body">
+
+    <!-- ─── Col 1: Modes + Shortcuts ─── -->
+    <div class="col col-1 col-border">
+      <div class="sec" style="color:var(--accent)"><span class="dot" style="background:var(--accent)"></span> Interaction Modes</div>
+
+      <div class="mode-row">
+        <div class="mode-icon g">👻</div>
+        <div class="mode-info">
+          <div class="mode-name">Ghost Text</div>
+          <div class="mode-key">Just type — completions appear</div>
+        </div>
+      </div>
+      <div class="mode-row">
+        <div class="mode-icon i">⚡</div>
+        <div class="mode-info">
+          <div class="mode-name">Inline Chat</div>
+          <div class="mode-key"><kbd>⌘</kbd><kbd>I</kbd> / <kbd>Ctrl</kbd><kbd>I</kbd></div>
+        </div>
+      </div>
+      <div class="mode-row">
+        <div class="mode-icon p">💬</div>
+        <div class="mode-info">
+          <div class="mode-name">Chat Panel</div>
+          <div class="mode-key"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>I</kbd> / <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>I</kbd></div>
+        </div>
+      </div>
+
+      <div class="sec" style="color:var(--gold); margin-top:.2rem;"><span class="dot" style="background:var(--gold)"></span> Key Shortcuts</div>
+      <table>
+        <tr><td>Accept</td><td><kbd>Tab</kbd></td></tr>
+        <tr><td>Dismiss</td><td><kbd>Esc</kbd></td></tr>
+        <tr><td>Next / Prev</td><td><kbd>⌥</kbd><kbd>]</kbd> <kbd>[</kbd></td></tr>
+        <tr><td>Accept word</td><td><kbd>⌘</kbd><kbd>→</kbd></td></tr>
+        <tr><td>New chat</td><td><kbd>⌘</kbd><kbd>L</kbd></td></tr>
+      </table>
+    </div>
+
+    <!-- ─── Col 2: Commands + Participants + CRAFT ─── -->
+    <div class="col col-2 col-border">
+      <div class="sec" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Slash Commands</div>
+      <table>
+        <tr><td><code>/tests</code></td><td>Generate test suite for selection</td></tr>
+        <tr><td><code>/fix</code></td><td>Fix bugs in selected code</td></tr>
+        <tr><td><code>/doc</code></td><td>Add documentation / JSDoc</td></tr>
+        <tr><td><code>/explain</code></td><td>Explain what code does</td></tr>
+      </table>
+
+      <div class="sec" style="color:var(--purple); margin-top:.2rem;"><span class="dot" style="background:var(--purple)"></span> Chat Participants</div>
+      <table>
+        <tr><td><code>@workspace</code></td><td>Search entire project</td></tr>
+        <tr><td><code>@vscode</code></td><td>Editor settings & features</td></tr>
+        <tr><td><code>@terminal</code></td><td>Recent terminal output</td></tr>
+      </table>
+
+      <div class="sec" style="color:var(--orange); margin-top:.2rem;"><span class="dot" style="background:var(--orange)"></span> CRAFT Prompts</div>
+      <div class="craft">
+        <div class="craft-row"><div class="craft-letter cl-c">C</div><div class="craft-label">Context</div><div class="craft-eg">"In this Express API…"</div></div>
+        <div class="craft-row"><div class="craft-letter cl-r">R</div><div class="craft-label">Role</div><div class="craft-eg">"Write a middleware…"</div></div>
+        <div class="craft-row"><div class="craft-letter cl-a">A</div><div class="craft-label">Attributes</div><div class="craft-eg">"…with logging, auth…"</div></div>
+        <div class="craft-row"><div class="craft-letter cl-f">F</div><div class="craft-label">Format</div><div class="craft-eg">"…as ES module + JSDoc"</div></div>
+        <div class="craft-row"><div class="craft-letter cl-t">T</div><div class="craft-label">Tests</div><div class="craft-eg">"…with edge cases"</div></div>
+      </div>
+    </div>
+
+    <!-- ─── Col 3: Tips + Decision Tree ─── -->
+    <div class="col col-3">
+      <div class="sec" style="color:var(--pink)"><span class="dot" style="background:var(--pink)"></span> Pro Tips</div>
+      <ul class="tips">
+        <li><strong>Open relevant files</strong> — Copilot reads your tabs for context</li>
+        <li><strong>Name things well</strong> — <code>getFlightPrice</code> &gt; <code>gfp</code></li>
+        <li><strong>Comment first</strong>, let Copilot write the code</li>
+        <li><strong>Iterate</strong> — start rough, refine with follow-ups</li>
+        <li><strong>Review always</strong> — you're the editor, not the typist</li>
+        <li><strong>Use #file</strong> to attach specific files as context</li>
+        <li><strong>Highlight code</strong> before asking inline chat</li>
+      </ul>
+
+      <div class="sec" style="color:var(--accent); margin-top:.25rem;"><span class="dot" style="background:var(--accent)"></span> When to Use What</div>
+      <div class="tree">
+        <div class="tree-r"><span class="tree-q">Know what you want?</span> <span class="arr">→</span> <span class="tree-a">Ghost Text</span></div>
+        <div class="tree-r"><span class="tree-q">Transform code?</span> <span class="arr">→</span> <span class="tree-a">Inline Chat</span></div>
+        <div class="tree-r"><span class="tree-q">Think out loud?</span> <span class="arr">→</span> <span class="tree-a">Chat Panel</span></div>
+        <div class="tree-r"><span class="tree-q">Tests / docs / fix?</span> <span class="arr">→</span> <span class="tree-a">Slash Cmds</span></div>
+        <div class="tree-r"><span class="tree-q">Project context?</span> <span class="arr">→</span> <span class="tree-a">@workspace</span></div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <div class="foot">
+    <span>github.com/msfttoler/flight-plan-copilot</span>
+    <span>Print: ⌘P → 5×3 card</span>
+  </div>
+</div>
+
+</body>
+</html>
