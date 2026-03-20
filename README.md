@@ -12,12 +12,19 @@ This repo includes **both** the workshop curriculum **and** a ready-to-run demo 
 
 ```
 flight-plan-copilot/
-├── docs/copilot-workshop/     # Workshop curriculum (14 modules)
+├── .github/
+│   ├── copilot-instructions.md  # Repo-wide Copilot config (flight theme, conventions)
+│   └── skills/branch-first/     # Skill: always branch before editing
+├── docs/
+│   ├── copilot-workshop/        # Workshop curriculum (14 modules)
+│   ├── CHEAT-SHEET.md           # Presenter single-page prompt reference
+│   └── QUICK-REFERENCE.md       # Participant handout (shortcuts, CRAFT, tips)
 ├── demos/
-│   ├── DEMO-SCRIPT.md         # Master presenter guide
-│   ├── 01-legacy-upgrade/     # Express 4 → modern Node.js (Copilot modernization)
+│   ├── DEMO-SCRIPT.md           # Master presenter guide
+│   ├── 01-legacy-upgrade/       # Express 4 → modern Node.js
 │   ├── 02-webapp-to-containers/ # App Service → Azure Container Apps
-│   └── 03-quick-wins/         # Bug hunt, test generation, two-minute wow
+│   └── 03-quick-wins/           # Bug hunt, test generation, two-minute wow
+├── setup.sh                     # One-command environment setup
 └── README.md
 ```
 
@@ -210,16 +217,20 @@ For groups that finish early or want to go deeper:
 - `gh` CLI with Copilot extension (for CLI demos)
 - Docker Desktop (for Demo 2: containerization)
 - Projector/screen share, 20pt+ editor font
+- Print the [Presenter Cheat Sheet](docs/CHEAT-SHEET.md) — every prompt you'll type, in order
+- Share the [Quick Reference Card](docs/QUICK-REFERENCE.md) with attendees at the start
 
-**Demo setup commands:**
+**One-command setup:**
 ```bash
-# Install demo dependencies
+chmod +x setup.sh && ./setup.sh
+```
+
+This checks tools (Node, Docker, gh CLI), installs demo dependencies, and smoke-tests both apps.
+
+**Or manually:**
+```bash
 cd demos/01-legacy-upgrade/legacy-app && npm install && cd -
 cd demos/02-webapp-to-containers/webapp && npm install && cd -
-
-# Verify both apps start
-cd demos/01-legacy-upgrade/legacy-app && npm start   # http://localhost:3000
-cd demos/02-webapp-to-containers/webapp && npm start  # http://localhost:8080
 ```
 
 ---
@@ -254,6 +265,14 @@ All session content lives in [`docs/copilot-workshop/`](docs/copilot-workshop/):
 | [11-wrap-up.md](docs/copilot-workshop/11-wrap-up.md) | Wrap-Up & Q&A |
 | [extra-credit-a-copilot-cli.md](docs/copilot-workshop/extra-credit-a-copilot-cli.md) | Extra Credit: Copilot CLI |
 | [extra-credit-b-copilot-sdk.md](docs/copilot-workshop/extra-credit-b-copilot-sdk.md) | Extra Credit: Build a Copilot Extension |
+
+Presenter tools and participant handouts:
+
+| Path | What It Is |
+|------|-----------||
+| [docs/CHEAT-SHEET.md](docs/CHEAT-SHEET.md) | Single-page presenter reference — every prompt in order |
+| [docs/QUICK-REFERENCE.md](docs/QUICK-REFERENCE.md) | Participant handout — shortcuts, CRAFT framework, tips |
+| [setup.sh](setup.sh) | One-command environment setup and smoke test |
 
 Demo code and presenter walk-throughs live in [`demos/`](demos/):
 
