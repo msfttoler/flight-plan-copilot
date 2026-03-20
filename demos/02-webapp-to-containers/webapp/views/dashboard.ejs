@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>✈️ <%= title %></h1>
+    <p class="updated">Last updated: <%= lastUpdated %></p>
+  </header>
+
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Departs</th>
+          <th>Arrives</th>
+          <th>Gate</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flights.forEach(function(f) { %>
+        <tr class="status-<%= f.status.toLowerCase().replace(' ', '-') %>">
+          <td><strong><%= f.id %></strong></td>
+          <td><%= f.origin %></td>
+          <td><%= f.destination %></td>
+          <td><%= f.departs %></td>
+          <td><%= f.arrives %></td>
+          <td><%= f.gate %></td>
+          <td><span class="badge"><%= f.status %></span></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>Flight Dashboard v1.0 — Traditional Web App (ready for containerization)</p>
+  </footer>
+</body>
+</html>

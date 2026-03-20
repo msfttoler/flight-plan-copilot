@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/web-app-manifest.json",
+  "name": "flight-dashboard-webapp",
+  "version": "1.0.0",
+  "runtime": "node|18-lts",
+  "startup": {
+    "command": "npm start"
+  },
+  "appSettings": [
+    { "name": "PORT",         "value": "8080" },
+    { "name": "NODE_ENV",     "value": "production" },
+    { "name": "APP_VERSION",  "value": "1.0.0" }
+  ],
+  "notes": "This config mimics an Azure App Service configuration. No Dockerfile. No container registry. Just a Node.js app deployed with zip deploy or Git deploy."
+}

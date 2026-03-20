@@ -1,0 +1,198 @@
+<!-- 
+  TWO-MINUTE WOW: Flight Status Board
+  
+  DEMO INSTRUCTIONS:
+  1. Open a new file called "flight-board.html" 
+  2. Type ONLY this comment at the top:
+     
+     // Create a live airport flight departure board with:
+     // - Retro split-flap display aesthetic (dark background, yellow/green text)
+     // - Table showing: Flight, Destination, Gate, Time, Status  
+     // - Status badges: On Time (green), Delayed (yellow), Cancelled (red), Boarding (blue)
+     // - Auto-refresh animation every 5 seconds that "flips" a random status
+     // - Clock in the header showing current time
+     // - All in a single HTML file with embedded CSS and JS
+
+  3. Let Copilot generate the entire file
+  4. Open in browser — instant wow
+
+  Below is what the finished product should look like (for reference/fallback):
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Departures</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #f5c518;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    #clock {
+      font-size: 3rem;
+      color: #00ff88;
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #16213e;
+      color: #f5c518;
+      padding: 1rem;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #f5c518;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #2a2a4a;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    tr:hover td { background: #16213e; }
+
+    .flight-num { color: #ffffff; font-weight: bold; }
+    .destination { color: #e0e0e0; }
+    .gate { color: #a0a0c0; }
+    .time { color: #00ff88; }
+
+    .status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: inline-block;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .on-time   { background: #064e3b; color: #6ee7b7; }
+    .delayed   { background: #78350f; color: #fbbf24; }
+    .cancelled { background: #7f1d1d; color: #fca5a5; }
+    .boarding  { background: #1e3a5f; color: #7dd3fc; }
+
+    .flip { animation: flip 0.4s ease-in-out; }
+
+    @keyframes flip {
+      0%   { transform: scaleY(1); opacity: 1; }
+      50%  { transform: scaleY(0); opacity: 0.5; }
+      100% { transform: scaleY(1); opacity: 1; }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #4a4a6a;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>✈ Departures</h1>
+    <div id="clock"></div>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Flight</th>
+        <th>Destination</th>
+        <th>Gate</th>
+        <th>Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="board"></tbody>
+  </table>
+
+  <footer>Live Flight Information — All times local</footer>
+
+  <script>
+    const flights = [
+      { flight: 'AA 100', dest: 'Los Angeles (LAX)',    gate: 'B22', time: '08:00', status: 'on-time'   },
+      { flight: 'UA 201', dest: 'Chicago (ORD)',        gate: 'A14', time: '09:15', status: 'delayed'   },
+      { flight: 'DL 305', dest: 'Boston (BOS)',         gate: 'C08', time: '10:30', status: 'boarding'  },
+      { flight: 'SW 440', dest: 'Seattle (SEA)',        gate: '—',   time: '12:00', status: 'cancelled' },
+      { flight: 'AA 550', dest: 'Dallas (DFW)',         gate: 'D12', time: '14:30', status: 'on-time'   },
+      { flight: 'UA 610', dest: 'Denver (DEN)',         gate: 'F03', time: '16:00', status: 'on-time'   },
+      { flight: 'DL 720', dest: 'Atlanta (ATL)',        gate: 'C11', time: '17:45', status: 'on-time'   },
+      { flight: 'SW 830', dest: 'Phoenix (PHX)',        gate: 'E07', time: '19:00', status: 'delayed'   },
+    ];
+
+    const statuses = ['on-time', 'delayed', 'cancelled', 'boarding'];
+    const statusLabels = { 'on-time': 'On Time', 'delayed': 'Delayed', 'cancelled': 'Cancelled', 'boarding': 'Boarding' };
+
+    function renderBoard() {
+      const tbody = document.getElementById('board');
+      tbody.innerHTML = flights.map((f, i) => `
+        <tr id="row-${i}">
+          <td class="flight-num">${f.flight}</td>
+          <td class="destination">${f.dest}</td>
+          <td class="gate">${f.gate}</td>
+          <td class="time">${f.time}</td>
+          <td><span class="status ${f.status}">${statusLabels[f.status]}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent =
+        now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function randomFlip() {
+      const i = Math.floor(Math.random() * flights.length);
+      const f = flights[i];
+      // Only change non-cancelled flights
+      if (f.status !== 'cancelled') {
+        const available = statuses.filter(s => s !== f.status && s !== 'cancelled');
+        f.status = available[Math.floor(Math.random() * available.length)];
+      }
+      renderBoard();
+      const row = document.getElementById(`row-${i}`);
+      row.querySelectorAll('td').forEach(td => {
+        td.classList.add('flip');
+        setTimeout(() => td.classList.remove('flip'), 400);
+      });
+    }
+
+    renderBoard();
+    setInterval(updateClock, 1000);
+    setInterval(randomFlip, 5000);
+    updateClock();
+  </script>
+</body>
+</html>
